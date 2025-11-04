@@ -421,19 +421,19 @@ const HTML_CONTENT = `
             position: relative;
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
             color: white;
-            padding: var(--spacing-xl) var(--spacing-lg);
+            padding: var(--spacing-lg) var(--spacing-lg);
             text-align: center;
         }
 
         .header h1 {
-            font-size: 48px;
+            font-size: 32px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: 6px;
         }
 
         .header .update-time {
-            font-size: 20px;
+            font-size: 15px;
             opacity: 0.85;
             font-weight: 400;
         }
@@ -970,15 +970,15 @@ const HTML_CONTENT = `
 
         .manage-btn {
             position: absolute;
-            top: var(--spacing-lg);
-            right: var(--spacing-lg);
+            top: var(--spacing-md);
+            right: var(--spacing-md);
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 100px;
-            padding: 10px 20px;
-            font-size: 14px;
+            padding: 8px 16px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1593,8 +1593,8 @@ const HTML_CONTENT = `
 
         @media (max-width: 768px) {
             body { padding: var(--spacing-sm); }
-            .header { padding: var(--spacing-lg); }
-            .header h1 { font-size: 26px; }
+            .header { padding: var(--spacing-md); }
+            .header h1 { font-size: 24px; }
             .stats-cards {
                 grid-template-columns: 1fr;
                 padding: var(--spacing-lg);
@@ -1631,7 +1631,7 @@ const HTML_CONTENT = `
         <div class="header">
             <h1>🚀 Droid API 余额监控看板</h1>
             <div class="update-time" id="updateTime">正在加载...</div>
-            <div style="margin-top: 8px; font-size: 14px; opacity: 0.85;">
+            <div style="margin-top: 4px; font-size: 13px; opacity: 0.85;">
                 <span id="autoRefreshStatus">自动刷新: 启用中 | 下次刷新: <span id="headerNextRefresh">计算中...</span></span>
             </div>
             <button class="manage-btn" onclick="toggleManagePanel()">⚙️ 管理密钥</button>
@@ -2238,6 +2238,12 @@ const HTML_CONTENT = `
             // 更新按钮状态
             document.getElementById('cardViewBtn').classList.toggle('active', mode === 'card');
             document.getElementById('tableViewBtn').classList.toggle('active', mode === 'table');
+
+            // 显示/隐藏统计卡片区域
+            const statsCards = document.getElementById('statsCards');
+            if (statsCards) {
+                statsCards.style.display = mode === 'card' ? 'none' : 'grid';
+            }
 
             // 重新渲染
             if (allData) {
@@ -2961,6 +2967,12 @@ const HTML_CONTENT = `
             // 初始化视图按钮状态
             document.getElementById('cardViewBtn').classList.toggle('active', currentViewMode === 'card');
             document.getElementById('tableViewBtn').classList.toggle('active', currentViewMode === 'table');
+            
+            // 初始化统计卡片显示状态
+            const statsCards = document.getElementById('statsCards');
+            if (statsCards) {
+                statsCards.style.display = currentViewMode === 'card' ? 'none' : 'grid';
+            }
             
             loadData();
             initAutoRefresh();

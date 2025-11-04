@@ -1541,6 +1541,57 @@ const HTML_CONTENT = `
             transform: translateY(-2px);
         }
 
+        .key-card-env-group {
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid var(--color-border);
+            margin-top: var(--spacing-sm);
+        }
+
+        .key-card-env-title {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+            text-align: center;
+        }
+
+        .key-card-env-buttons {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .key-card-btn-env {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid var(--color-border);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .key-card-btn-env:hover {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .key-card-btn-env.copied {
+            background: var(--color-success);
+            color: white;
+            border-color: var(--color-success);
+        }
+
         /* 总计卡片样式 */
         .total-card {
             grid-column: 1 / -1;
@@ -2403,6 +2454,20 @@ const HTML_CONTENT = `
                                     🗑️ 删除
                                 </button>
                             </div>
+
+                            <div class="key-card-env-group">
+                                <div class="key-card-env-title">复制环境变量</div>
+                                <div class="key-card-env-buttons">
+                                    <button class="key-card-btn-env" 
+                                            onclick="copyEnvVar('\${item.id}', 'windows', this)">
+                                        🪟 Windows
+                                    </button>
+                                    <button class="key-card-btn-env" 
+                                            onclick="copyEnvVar('\${item.id}', 'unix', this)">
+                                        🐧 非 Windows
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     \`;
                 }
@@ -2422,6 +2487,48 @@ const HTML_CONTENT = `
             document.getElementById('tableContent').innerHTML = cardsHTML;
             updatePageSizeSelect();
             updateBatchToolbar();
+        }
+
+        // 复制环境变量函数
+        async function copyEnvVar(id, platform, button) {
+            try {
+                let key = keyCache.get(id);
+                
+                if (!key) {
+                    const response = await fetch(\`/api/keys/\${id}/full\`);
+                    if (!response.ok) {
+                        throw new Error('获取完整 Key 失败');
+                    }
+                    const data = await response.json();
+                    key = data.key;
+                    keyCache.set(id, key);
+                }
+                
+                let envCommand;
+                if (platform === 'windows') {
+                    envCommand = \`\$env:FACTORY_API_KEY = "\${key}"\`;
+                } else {
+                    envCommand = \`export FACTORY_API_KEY=\${key}\`;
+                }
+                
+                const success = await copyToClipboard(envCommand);
+                
+                if (success) {
+                    button.classList.add('copied');
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '✅ 已复制';
+                    showToast(\`环境变量命令已复制到剪贴板 (\${platform === 'windows' ? 'Windows' : '非 Windows'})\`);
+                    
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = originalText;
+                    }, 2000);
+                } else {
+                    showToast('复制失败，请重试', true);
+                }
+            } catch (error) {
+                showToast('复制失败: ' + error.message, true);
+            }
         }
 
         // 卡片视图的复制函数

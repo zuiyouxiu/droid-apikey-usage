@@ -1279,7 +1279,318 @@ const HTML_CONTENT = `
             transform: scale(0.98);
         }
 
+        /* 卡片视图样式 */
+        .view-toggle {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .view-toggle-btn {
+            background: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .view-toggle-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .view-toggle-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--spacing-lg);
+            padding: 0;
+        }
+
+        .key-card {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--color-shadow);
+            border-color: var(--color-primary);
+        }
+
+        .key-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(0, 122, 255, 0.02);
+        }
+
+        .key-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+            gap: var(--spacing-md);
+        }
+
+        .key-card-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .key-card-id {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+            flex: 1;
+        }
+
+        .key-card-status {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .key-card-status.status-good {
+            background: rgba(52, 199, 89, 0.15);
+            color: var(--color-success);
+        }
+
+        .key-card-status.status-warning {
+            background: rgba(255, 149, 0, 0.15);
+            color: var(--color-warning);
+        }
+
+        .key-card-status.status-danger {
+            background: rgba(255, 59, 48, 0.15);
+            color: var(--color-danger);
+        }
+
+        .key-card-key {
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+            color: var(--color-text-primary);
+            background: var(--color-bg);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-md);
+            word-break: break-all;
+            font-weight: 500;
+        }
+
+        .key-card-progress {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .key-card-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        .key-card-progress-bar {
+            height: 10px;
+            background: var(--color-bg);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .key-card-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            border-radius: 100px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .key-card-progress-fill.warning {
+            background: linear-gradient(90deg, var(--color-warning), #FF6B00);
+        }
+
+        .key-card-progress-fill.danger {
+            background: linear-gradient(90deg, var(--color-danger), #D32F2F);
+        }
+
+        .key-card-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .key-card-stat {
+            text-align: center;
+        }
+
+        .key-card-stat-label {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .key-card-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        }
+
+        .key-card-dates {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-sm);
+            background: var(--color-bg);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .key-card-date {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .key-card-date-label {
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .key-card-date-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+        }
+
+        .key-card-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .key-card-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+
+        .key-card-btn-copy {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .key-card-btn-copy:hover {
+            background: #0056D2;
+            transform: translateY(-2px);
+        }
+
+        .key-card-btn-copy.copied {
+            background: var(--color-success);
+        }
+
+        .key-card-btn-delete {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .key-card-btn-delete:hover {
+            background: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        /* 总计卡片样式 */
+        .total-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(88, 86, 214, 0.12) 100%);
+            border: 2px solid var(--color-primary);
+            padding: var(--spacing-xl);
+        }
+
+        .total-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-lg);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .total-card-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .total-card-stat {
+            text-align: center;
+        }
+
+        .total-card-stat-label {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .total-card-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        }
+
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             body { padding: var(--spacing-sm); }
             .header { padding: var(--spacing-lg); }
@@ -1305,6 +1616,12 @@ const HTML_CONTENT = `
                 bottom: var(--spacing-md);
                 right: var(--spacing-md);
                 padding: 14px 24px;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .key-card-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1371,6 +1688,14 @@ const HTML_CONTENT = `
 
         <div class="table-container">
             <div class="table-controls">
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="cardViewBtn" onclick="switchView('card')">
+                        📇 卡片视图
+                    </button>
+                    <button class="view-toggle-btn" id="tableViewBtn" onclick="switchView('table')">
+                        📊 表格视图
+                    </button>
+                </div>
                 <div class="page-size-control">
                     <span>每页显示</span>
                     <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
@@ -1400,9 +1725,11 @@ const HTML_CONTENT = `
     <script>
         // 分页变量
         const PAGE_SIZE_STORAGE_KEY = 'tablePageSize';
+        const VIEW_MODE_STORAGE_KEY = 'viewMode';
         let currentPage = 1;
         let itemsPerPage = getStoredPageSize() || 10; // 默认 10 条 / 页
         let allData = null;
+        let currentViewMode = localStorage.getItem(VIEW_MODE_STORAGE_KEY) || 'card'; // 默认卡片视图
 
         // 自动刷新变量
         let autoRefreshInterval = null;
@@ -1895,7 +2222,272 @@ const HTML_CONTENT = `
                 </div>
             \`;
 
-            renderTable();
+            // 根据当前视图模式渲染
+            if (currentViewMode === 'card') {
+                renderCards();
+            } else {
+                renderTable();
+            }
+        }
+
+        // 视图切换函数
+        function switchView(mode) {
+            currentViewMode = mode;
+            localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+
+            // 更新按钮状态
+            document.getElementById('cardViewBtn').classList.toggle('active', mode === 'card');
+            document.getElementById('tableViewBtn').classList.toggle('active', mode === 'table');
+
+            // 重新渲染
+            if (allData) {
+                if (mode === 'card') {
+                    renderCards();
+                } else {
+                    renderTable();
+                }
+            }
+        }
+
+        // 获取状态类名和文本
+        function getStatusInfo(usedRatio, remaining) {
+            if (remaining <= 0) {
+                return { class: 'status-danger', text: '已用尽' };
+            } else if (usedRatio >= 0.8) {
+                return { class: 'status-warning', text: '即将用尽' };
+            } else {
+                return { class: 'status-good', text: '正常' };
+            }
+        }
+
+        // 渲染卡片视图
+        function renderCards() {
+            if (!allData) return;
+
+            const data = allData;
+            const totalItems = data.data.length;
+            const isUnlimited = itemsPerPage === Infinity;
+            const totalPages = isUnlimited ? 1 : Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+
+            const startIndex = isUnlimited ? 0 : (currentPage - 1) * itemsPerPage;
+            const endIndex = isUnlimited ? totalItems : startIndex + itemsPerPage;
+            const pageData = data.data.slice(startIndex, endIndex);
+
+            const totalAllowance = data.totals.total_totalAllowance;
+            const totalUsed = data.totals.total_orgTotalTokensUsed;
+            const totalRemaining = data.totals.total_tokensRemaining;
+            const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
+
+            let cardsHTML = '<div class="cards-grid">';
+
+            // 总计卡片
+            cardsHTML += \`
+                <div class="key-card total-card">
+                    <div class="total-card-title">📊 总计统计 (Total Summary)</div>
+                    <div class="total-card-stats">
+                        <div class="total-card-stat">
+                            <div class="total-card-stat-label">总计额度</div>
+                            <div class="total-card-stat-value">\${formatNumber(totalAllowance)}</div>
+                        </div>
+                        <div class="total-card-stat">
+                            <div class="total-card-stat-label">已使用</div>
+                            <div class="total-card-stat-value">\${formatNumber(totalUsed)}</div>
+                        </div>
+                        <div class="total-card-stat">
+                            <div class="total-card-stat-label">剩余额度</div>
+                            <div class="total-card-stat-value">\${formatNumber(totalRemaining)}</div>
+                        </div>
+                        <div class="total-card-stat">
+                            <div class="total-card-stat-label">使用百分比</div>
+                            <div class="total-card-stat-value">\${formatPercentage(overallRatio)}</div>
+                        </div>
+                    </div>
+                </div>
+            \`;
+
+            // 数据卡片
+            pageData.forEach(item => {
+                const isChecked = selectedKeys.has(item.id);
+                
+                if (item.error) {
+                    cardsHTML += \`
+                        <div class="key-card \${isChecked ? 'selected' : ''}">
+                            <div class="key-card-header">
+                                <input type="checkbox" class="key-card-checkbox" \${isChecked ? 'checked' : ''} 
+                                       onchange="toggleSelection('\${item.id}'); renderCards();">
+                                <div class="key-card-id">\${item.id}</div>
+                                <span class="key-card-status status-danger">错误</span>
+                            </div>
+                            <div class="key-card-key">\${item.key}</div>
+                            <div style="color: var(--color-danger); padding: 12px; text-align: center;">
+                                ❌ 加载失败: \${item.error}
+                            </div>
+                            <div class="key-card-actions">
+                                <button class="key-card-btn key-card-btn-delete" onclick="deleteKeyFromCard('\${item.id}')">
+                                    🗑️ 删除
+                                </button>
+                            </div>
+                        </div>
+                    \`;
+                } else {
+                    const remaining = item.totalAllowance - item.orgTotalTokensUsed;
+                    const status = getStatusInfo(item.usedRatio, remaining);
+                    const progressClass = status.class === 'status-danger' ? 'danger' : 
+                                        (status.class === 'status-warning' ? 'warning' : '');
+
+                    cardsHTML += \`
+                        <div class="key-card \${isChecked ? 'selected' : ''}">
+                            <div class="key-card-header">
+                                <input type="checkbox" class="key-card-checkbox" \${isChecked ? 'checked' : ''} 
+                                       onchange="toggleSelection('\${item.id}'); renderCards();">
+                                <div class="key-card-id">\${item.id}</div>
+                                <span class="key-card-status \${status.class}">\${status.text}</span>
+                            </div>
+
+                            <div class="key-card-key" title="\${item.key}">\${item.key}</div>
+
+                            <div class="key-card-progress">
+                                <div class="key-card-progress-label">
+                                    <span>使用进度</span>
+                                    <span>\${formatPercentage(item.usedRatio)}</span>
+                                </div>
+                                <div class="key-card-progress-bar">
+                                    <div class="key-card-progress-fill \${progressClass}" 
+                                         style="width: \${(item.usedRatio * 100).toFixed(2)}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="key-card-stats">
+                                <div class="key-card-stat">
+                                    <div class="key-card-stat-label">总额度</div>
+                                    <div class="key-card-stat-value">\${formatNumber(item.totalAllowance)}</div>
+                                </div>
+                                <div class="key-card-stat">
+                                    <div class="key-card-stat-label">已使用</div>
+                                    <div class="key-card-stat-value">\${formatNumber(item.orgTotalTokensUsed)}</div>
+                                </div>
+                                <div class="key-card-stat">
+                                    <div class="key-card-stat-label">剩余</div>
+                                    <div class="key-card-stat-value">\${formatNumber(remaining)}</div>
+                                </div>
+                            </div>
+
+                            <div class="key-card-dates">
+                                <div class="key-card-date">
+                                    <div class="key-card-date-label">开始时间</div>
+                                    <div class="key-card-date-value">\${item.startDate}</div>
+                                </div>
+                                <div class="key-card-date">
+                                    <div class="key-card-date-label">结束时间</div>
+                                    <div class="key-card-date-value">\${item.endDate}</div>
+                                </div>
+                            </div>
+
+                            <div class="key-card-actions">
+                                <button class="key-card-btn key-card-btn-copy" 
+                                        onclick="copyKeyFromCard('\${item.id}', this)">
+                                    📋 复制 Key
+                                </button>
+                                <button class="key-card-btn key-card-btn-delete" 
+                                        onclick="deleteKeyFromCard('\${item.id}')">
+                                    🗑️ 删除
+                                </button>
+                            </div>
+                        </div>
+                    \`;
+                }
+            });
+
+            cardsHTML += '</div>';
+
+            // 添加分页控件
+            if (totalPages > 1 && !isUnlimited) {
+                cardsHTML += \`<div class="pagination">\`;
+                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>❮ 上一页</button>\`;
+                cardsHTML += \`<span class="pagination-info">第 \${currentPage} / \${totalPages} 页 (共 \${data.data.length} 条)</span>\`;
+                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage + 1})" \${currentPage === totalPages ? 'disabled' : ''}>下一页 ❯</button>\`;
+                cardsHTML += \`</div>\`;
+            }
+
+            document.getElementById('tableContent').innerHTML = cardsHTML;
+            updatePageSizeSelect();
+            updateBatchToolbar();
+        }
+
+        // 卡片视图的复制函数
+        async function copyKeyFromCard(id, button) {
+            try {
+                let key = keyCache.get(id);
+                
+                if (!key) {
+                    const response = await fetch(\`/api/keys/\${id}/full\`);
+                    if (!response.ok) {
+                        throw new Error('获取完整 Key 失败');
+                    }
+                    const data = await response.json();
+                    key = data.key;
+                    keyCache.set(id, key);
+                }
+                
+                const success = await copyToClipboard(key);
+                
+                if (success) {
+                    button.classList.add('copied');
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '✅ 已复制';
+                    showToast('API Key 已复制到剪贴板');
+                    
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = originalText;
+                    }, 2000);
+                } else {
+                    showToast('复制失败，请重试', true);
+                }
+            } catch (error) {
+                showToast('复制失败: ' + error.message, true);
+            }
+        }
+
+        // 卡片视图的删除函数
+        async function deleteKeyFromCard(id) {
+            if (!confirm('确定要删除这个 API Key 吗？')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(\`/api/keys/\${id}\`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showToast('✅ 删除成功');
+                    keyCache.cache.delete(id);
+                    selectedKeys.delete(id);
+                    loadData();
+                } else {
+                    const data = await response.json();
+                    showToast('删除失败: ' + data.error, true);
+                }
+            } catch (error) {
+                showToast('删除失败: ' + error.message, true);
+            }
+        }
+
+        // 更新分页选择器
+        function updatePageSizeSelect() {
+            const pageSizeSelect = document.getElementById('pageSizeSelect');
+            if (pageSizeSelect) {
+                const isUnlimited = itemsPerPage === Infinity;
+                const selectValue = isUnlimited ? 'all' : String(itemsPerPage);
+                if (pageSizeSelect.value !== selectValue) {
+                    pageSizeSelect.value = selectValue;
+                }
+            }
         }
 
         function renderTable() {
@@ -2035,7 +2627,13 @@ const HTML_CONTENT = `
             if (page < 1 || page > totalPages) return;
 
             currentPage = page;
-            renderTable();
+            
+            // 根据当前视图模式渲染
+            if (currentViewMode === 'card') {
+                renderCards();
+            } else {
+                renderTable();
+            }
 
             // 滚动到表格顶部
             document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2055,7 +2653,13 @@ const HTML_CONTENT = `
                 console.error('保存分页设置失败:', error);
             }
             currentPage = 1;
-            renderTable();
+            
+            // 根据当前视图模式渲染
+            if (currentViewMode === 'card') {
+                renderCards();
+            } else {
+                renderTable();
+            }
 
             document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -2353,6 +2957,11 @@ const HTML_CONTENT = `
                     pageSizeSelect.value = selectValue;
                 }
             }
+            
+            // 初始化视图按钮状态
+            document.getElementById('cardViewBtn').classList.toggle('active', currentViewMode === 'card');
+            document.getElementById('tableViewBtn').classList.toggle('active', currentViewMode === 'table');
+            
             loadData();
             initAutoRefresh();
         });

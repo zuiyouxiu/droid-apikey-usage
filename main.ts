@@ -406,7 +406,7 @@ const LOGIN_PAGE = `
             const btn = document.getElementById('loginThemeToggle');
             if (btn) {
                 const isDark = document.body.getAttribute('data-theme') === 'dark';
-                btn.textContent = isDark ? '☀️' : '🌙';
+                btn.textContent = isDark ? '\u2600\uFE0F' : '\u263D\uFE0F';
             }
         }
 
@@ -3281,10 +3281,10 @@ const HTML_CONTENT = `
 
             if (theme === 'dark') {
                 root.setAttribute('data-theme', 'dark');
-                if (toggleBtn) toggleBtn.textContent = '☀️';
+                if (toggleBtn) toggleBtn.textContent = '\u2600\uFE0F';
             } else {
                 root.removeAttribute('data-theme');
-                if (toggleBtn) toggleBtn.textContent = '🌙';
+                if (toggleBtn) toggleBtn.textContent = '\u263D\uFE0F';
             }
         }
 
@@ -3297,7 +3297,7 @@ const HTML_CONTENT = `
             applyTheme(newTheme);
 
             // Add visual feedback
-            showToast(`已切换到${newTheme === 'dark' ? '暗黑' : '浅色'}模式`);
+            showToast('已切换到' + (newTheme === 'dark' ? '暗黑' : '浅色') + '模式');
         }
 
         document.addEventListener('DOMContentLoaded', () => {

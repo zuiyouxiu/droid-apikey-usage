@@ -161,6 +161,12 @@ const LOGIN_PAGE = `
             align-items: center;
             justify-content: center;
             padding: 24px;
+            transition: background 0.35s ease;
+        }
+
+        /* Dark mode for login page body */
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, #0A84FF 0%, #6C5CE7 100%);
         }
 
         .login-container {
@@ -171,6 +177,75 @@ const LOGIN_PAGE = `
             max-width: 400px;
             width: 100%;
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
+        /* Dark mode styles for login page */
+        body[data-theme="dark"] .login-container {
+            background: #1C1C1E;
+            color: #F5F5F7;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        body[data-theme="dark"] .login-container h1 {
+            color: #F5F5F7;
+        }
+
+        body[data-theme="dark"] .login-container p {
+            color: #98989D;
+        }
+
+        body[data-theme="dark"] label {
+            color: #F5F5F7;
+        }
+
+        body[data-theme="dark"] input[type="password"] {
+            background: #2C2C2E;
+            color: #F5F5F7;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        body[data-theme="dark"] input[type="password"]:focus {
+            border-color: #0A84FF;
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
+        }
+
+        body[data-theme="dark"] .login-btn {
+            background: #0A84FF;
+        }
+
+        body[data-theme="dark"] .login-btn:hover {
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+        }
+
+        /* Theme toggle for login page */
+        .login-theme-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .login-theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body[data-theme="dark"] .login-theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         @keyframes slideUp {
@@ -282,6 +357,7 @@ const LOGIN_PAGE = `
     </style>
 </head>
 <body>
+    <button class="login-theme-toggle" id="loginThemeToggle" onclick="toggleLoginTheme()">🌙</button>
     <div class="login-container">
         <div class="login-icon">🔐</div>
         <h1>欢迎回来</h1>
@@ -310,6 +386,53 @@ const LOGIN_PAGE = `
     </div>
 
     <script>
+        // Initialize theme on page load
+        const THEME_STORAGE_KEY = 'themeMode';
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+            if (theme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+
+            // Update theme toggle button
+            updateLoginThemeButton();
+        }
+
+        function updateLoginThemeButton() {
+            const btn = document.getElementById('loginThemeToggle');
+            if (btn) {
+                const isDark = document.body.getAttribute('data-theme') === 'dark';
+                btn.textContent = isDark ? '☀️' : '🌙';
+            }
+        }
+
+        function toggleLoginTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+
+            if (newTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            } else {
+                document.body.removeAttribute('data-theme');
+            }
+
+            updateLoginThemeButton();
+        }
+
+        // Call initTheme as soon as the body element exists
+        if (document.body) {
+            initTheme();
+        } else {
+            document.addEventListener('DOMContentLoaded', initTheme);
+        }
+
         async function handleLogin(event) {
             event.preventDefault();
 
@@ -358,6 +481,7 @@ const HTML_CONTENT = `
     <style>
         /* Apple-inspired Design System with FiraCode */
         :root {
+            /* Light Mode (Default) */
             --color-primary: #007AFF;
             --color-secondary: #5856D6;
             --color-success: #34C759;
@@ -369,6 +493,10 @@ const HTML_CONTENT = `
             --color-text-secondary: #86868B;
             --color-border: rgba(0, 0, 0, 0.06);
             --color-shadow: rgba(0, 0, 0, 0.08);
+
+            /* Skip List - Keep light mode for UI elements in dark mode */
+            --skip-list-bg: #F5F5F7;
+
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 18px;
@@ -379,6 +507,45 @@ const HTML_CONTENT = `
             --spacing-lg: 24px;
             --spacing-xl: 32px;
             --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark Mode */
+        :root[data-theme="dark"] {
+            --color-primary: #0A84FF;
+            --color-secondary: #6C5CE7;
+            --color-success: #30D158;
+            --color-warning: #FF9F0A;
+            --color-danger: #FF453A;
+            --color-bg: #000000;
+            --color-surface: #1C1C1E;
+            --color-text-primary: #F5F5F7;
+            --color-text-secondary: #98989D;
+            --color-border: rgba(255, 255, 255, 0.12);
+            --color-shadow: rgba(0, 0, 0, 0.4);
+
+            /* Skip List - Keep light mode for UI elements in dark mode */
+            --skip-list-bg: #2C2C2E;
+        }
+
+        /* Dark mode for login page */
+        :root[data-theme="dark"] .login-container {
+            background: #1C1C1E;
+            color: #F5F5F7;
+        }
+
+        :root[data-theme="dark"] .login-container h1,
+        :root[data-theme="dark"] .login-container label {
+            color: #F5F5F7;
+        }
+
+        :root[data-theme="dark"] .login-container p {
+            color: #98989D;
+        }
+
+        :root[data-theme="dark"] input[type="password"] {
+            background: #2C2C2E;
+            color: #F5F5F7;
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         * {
@@ -968,10 +1135,29 @@ const HTML_CONTENT = `
             animation: spin 0.8s linear infinite;
         }
 
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 100px;
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
         .manage-btn {
-            position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             color: white;
@@ -987,6 +1173,18 @@ const HTML_CONTENT = `
         .manage-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.05);
+        }
+
+        /* Dark mode overlay styles for header buttons */
+        :root[data-theme="dark"] .theme-toggle-btn,
+        :root[data-theme="dark"] .manage-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        :root[data-theme="dark"] .theme-toggle-btn:hover,
+        :root[data-theme="dark"] .manage-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .manage-panel {
@@ -1685,7 +1883,10 @@ const HTML_CONTENT = `
             <div style="margin-top: 4px; font-size: 13px; opacity: 0.85;">
                 <span id="autoRefreshStatus">自动刷新: 启用中 | 下次刷新: <span id="headerNextRefresh">计算中...</span></span>
             </div>
-            <button class="manage-btn" onclick="toggleManagePanel()">⚙️ 管理密钥</button>
+            <div style="position: absolute; top: var(--spacing-md); right: var(--spacing-md); display: flex; gap: var(--spacing-sm);">
+                <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
+                <button class="manage-btn" onclick="toggleManagePanel()">⚙️ 管理密钥</button>
+            </div>
         </div>
 
         <!-- Management Panel -->
@@ -3062,6 +3263,43 @@ const HTML_CONTENT = `
             }
         }
 
+        // Theme toggle functions
+        const THEME_STORAGE_KEY = 'themeMode';
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            // Use saved theme, or system preference, or default to light
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            applyTheme(theme);
+        }
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            const toggleBtn = document.getElementById('themeToggle');
+
+            if (theme === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+                if (toggleBtn) toggleBtn.textContent = '☀️';
+            } else {
+                root.removeAttribute('data-theme');
+                if (toggleBtn) toggleBtn.textContent = '🌙';
+            }
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+            applyTheme(newTheme);
+
+            // Add visual feedback
+            showToast(`已切换到${newTheme === 'dark' ? '暗黑' : '浅色'}模式`);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const pageSizeSelect = document.getElementById('pageSizeSelect');
             if (pageSizeSelect) {
@@ -3070,17 +3308,20 @@ const HTML_CONTENT = `
                     pageSizeSelect.value = selectValue;
                 }
             }
-            
+
+            // Initialize theme first
+            initTheme();
+
             // 初始化视图按钮状态
             document.getElementById('cardViewBtn').classList.toggle('active', currentViewMode === 'card');
             document.getElementById('tableViewBtn').classList.toggle('active', currentViewMode === 'table');
-            
+
             // 初始化统计卡片显示状态
             const statsCards = document.getElementById('statsCards');
             if (statsCards) {
                 statsCards.style.display = currentViewMode === 'card' ? 'none' : 'grid';
             }
-            
+
             loadData();
             initAutoRefresh();
         });

@@ -2872,7 +2872,7 @@ const HTML_CONTENT = `
             applyTheme(newTheme);
 
             // Add visual feedback
-            showToast(`已切换到${newTheme === 'dark' ? '暗黑' : '浅色'}模式`);
+            showToast(\`已切换到\${newTheme === 'dark' ? '暗黑' : '浅色'}模式\`);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

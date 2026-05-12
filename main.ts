@@ -2372,6 +2372,17 @@ const HTML_CONTENT = `
                                 </div>
                             </div>
 
+                            <div class="key-card-dates">
+                                <div class="key-card-date">
+                                    <div class="key-card-date-label">开始时间</div>
+                                    <div class="key-card-date-value">\${item.startDate || 'N/A'}</div>
+                                </div>
+                                <div class="key-card-date">
+                                    <div class="key-card-date-label">到期时间</div>
+                                    <div class="key-card-date-value">\${item.endDate || 'N/A'}</div>
+                                </div>
+                            </div>
+
                             <div class="usage-limits-grid">
                                 \${renderLimitGroup('Standard Usage', billing.standard)}
                             </div>

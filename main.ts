@@ -9,6 +9,10 @@ const kv = await Deno.openKv();
 // Get admin password from environment variable
 const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
 
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 console.log(`🔒 Password Protection: ${ADMIN_PASSWORD ? 'ENABLED' : 'DISABLED'}`);
 
 // Session Management
@@ -567,7 +571,7 @@ const HTML_CONTENT = `
         }
 
         /* FiraCode for code/numbers - Scale 1.25x and anti-aliasing */
-        .code-font, .key-cell, td.number, .key-masked, #importKeys {
+        .code-font, .key-masked, #importKeys {
             font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Courier New', monospace;
             font-feature-settings: "liga" 1, "calt" 1;
             -webkit-font-smoothing: subpixel-antialiased;
@@ -603,77 +607,6 @@ const HTML_CONTENT = `
             font-size: 15px;
             opacity: 0.85;
             font-weight: 400;
-        }
-
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            padding: var(--spacing-xl);
-            background: var(--color-bg);
-        }
-
-        .stat-card {
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            padding: calc(var(--spacing-lg) * 1.25);
-            text-align: center;
-            border: 1px solid var(--color-border);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 40px var(--color-shadow);
-        }
-
-        .stat-card .label {
-            font-size: 18px;
-            color: var(--color-text-secondary);
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-card .value {
-            font-size: 56px;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'San Francisco', sans-serif;
-            font-variant-numeric: tabular-nums;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* 进度条背景 */
-        .stat-card .progress-background {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(88, 86, 214, 0.15) 100%);
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1;
-            border-radius: var(--radius-lg);
-        }
-
-        .stat-card .progress-background::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 122, 255, 0.6) 50%, transparent 100%);
-            box-shadow: 0 0 8px rgba(0, 122, 255, 0.4);
         }
 
         .table-container {
@@ -715,204 +648,9 @@ const HTML_CONTENT = `
             box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
         }
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: var(--color-surface);
-            border-radius: var(--radius-md);
-            overflow: visible;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            margin-bottom: var(--spacing-xl);
-            table-layout: fixed;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        }
 
-        thead {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-        }
-
-        th {
-            padding: 22px var(--spacing-md);
-            text-align: left;
-            font-weight: 700;
-            font-size: 13px;
-            white-space: nowrap;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        th.number { text-align: right; }
-
-        /* 调整列宽 */
-        th:nth-child(1) { width: 50px; } /* 复选框 */
-        th:nth-child(2) { width: 5%; } /* ID */
-        th:nth-child(3) { width: 9%; } /* API Key */
-        th:nth-child(4) { width: 9%; } /* 开始时间 */
-        th:nth-child(5) { width: 9%; } /* 结束时间 */
-        th:nth-child(6) { width: 12%; } /* 总计额度 */
-        th:nth-child(7) { width: 12%; } /* 已使用 */
-        th:nth-child(8) { width: 12%; } /* 剩余额度 */
-        th:nth-child(9) { width: 10%; } /* 使用百分比 */
-        th:nth-child(10) { width: 10%; } /* 操作 */
-
-        td {
-            padding: 22px var(--spacing-md);
-            border-bottom: 1px solid var(--color-border);
-            font-size: 15px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            vertical-align: middle;
-        }
-
-        td.number {
-            text-align: right;
-            font-weight: 500;
-            font-variant-numeric: tabular-nums;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'San Francisco', system-ui, sans-serif;
-            font-size: 18px;
-            letter-spacing: 0.3px;
-        }
-
-        td.error-row { color: var(--color-danger); }
-
-        tbody tr { 
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-        tbody tr:hover { 
-            background-color: rgba(0, 122, 255, 0.05);
-            border-left-color: var(--color-primary);
-        }
-        tbody tr:last-child td { border-bottom: none; }
-
-        /* 总计行样式 - 独特颜色 */
-        .total-row {
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(88, 86, 214, 0.12) 100%);
-            font-weight: 700;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            border-top: 2px solid var(--color-primary);
-            border-bottom: 3px solid var(--color-primary) !important;
-            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
-        }
-
-        .total-row td {
-            padding: 24px var(--spacing-md);
-            font-size: 16px;
-            color: var(--color-primary);
-            border-bottom: 3px solid var(--color-primary) !important;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-
-        .total-row td.number {
-            font-size: 20px;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'San Francisco', system-ui, sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        /* 按钮组容器 */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 按钮图标样式 */
-        .btn-icon {
-            width: 18px;
-            height: 18px;
-            display: inline-block;
-            vertical-align: middle;
-            filter: brightness(0) invert(1);
-        }
-
-        /* 复制按钮样式 */
-        .table-copy-btn {
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(0, 122, 255, 0.2);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-        }
-
-        .table-copy-btn:hover {
-            background: #0056D2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-
-        .table-copy-btn:active {
-            transform: translateY(0);
-        }
-
-        .table-copy-btn.copied {
-            background: var(--color-success);
-            box-shadow: 0 2px 6px rgba(52, 199, 89, 0.3);
-        }
-
-        /* 删除按钮样式 */
-        .table-delete-btn {
-            background: var(--color-danger);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(255, 59, 48, 0.2);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-        }
-
-        .table-delete-btn:hover {
-            background: #D32F2F;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
-        }
-
-        .table-delete-btn:active {
-            transform: translateY(0);
-        }
 
         /* 批量操作相关样式 */
-        .checkbox-cell {
-            width: 50px;
-            text-align: center;
-            padding: 22px 12px !important;
-        }
-
-        .checkbox-cell input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--color-primary);
-        }
-
         .batch-toolbar {
             position: sticky;
             top: 0;
@@ -1019,33 +757,6 @@ const HTML_CONTENT = `
         .toast-message {
             font-size: 15px;
             font-weight: 500;
-        }
-
-        .key-cell {
-            font-size: 20px;
-            color: var(--color-text-secondary);
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-family: 'Fira Code', monospace;
-            font-weight: 500;
-            background: rgba(0, 0, 0, 0.02);
-            padding: 8px 12px !important;
-            border-radius: 6px;
-        }
-
-        .id-cell {
-            font-size: 20px;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .date-cell {
-            font-size: 20px;
-            color: var(--color-text-primary);
-            font-weight: 400;
         }
 
         .refresh-btn {
@@ -1477,38 +1188,7 @@ const HTML_CONTENT = `
             transform: scale(0.98);
         }
 
-        /* 卡片视图样式 */
-        .view-toggle {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
-        }
 
-        .view-toggle-btn {
-            background: var(--color-surface);
-            color: var(--color-text-secondary);
-            border: 1.5px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .view-toggle-btn:hover {
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        .view-toggle-btn.active {
-            background: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
-        }
 
         .cards-grid {
             display: grid;
@@ -1633,6 +1313,82 @@ const HTML_CONTENT = `
 
         .key-card-progress-fill.danger {
             background: linear-gradient(90deg, var(--color-danger), #D32F2F);
+        }
+
+        .key-card-progress-bar.compact {
+            height: 8px;
+            margin: 6px 0;
+        }
+
+        .usage-limits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .limit-group {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            background: var(--color-bg);
+        }
+
+        .limit-group-title {
+            color: var(--color-text-primary);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .limit-window-row + .limit-window-row {
+            margin-top: var(--spacing-sm);
+        }
+
+        .limit-window-meta,
+        .limit-window-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-sm);
+            color: var(--color-text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .limit-window-label {
+            color: var(--color-text-primary);
+        }
+
+        .extra-usage-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--color-bg);
+        }
+
+        .usage-badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .usage-badge.status-good {
+            background: rgba(52, 199, 89, 0.15);
+            color: var(--color-success);
+        }
+
+        .usage-badge.status-warning {
+            background: rgba(255, 149, 0, 0.15);
+            color: var(--color-warning);
         }
 
         .key-card-stats {
@@ -1844,10 +1600,6 @@ const HTML_CONTENT = `
             body { padding: var(--spacing-sm); }
             .header { padding: var(--spacing-md); }
             .header h1 { font-size: 24px; }
-            .stats-cards {
-                grid-template-columns: 1fr;
-                padding: var(--spacing-lg);
-            }
             .table-container {
                 padding: 0 var(--spacing-md) var(--spacing-lg);
                 overflow-x: scroll;
@@ -1936,18 +1688,8 @@ const HTML_CONTENT = `
             </div>
         </div>
 
-        <div class="stats-cards" id="statsCards"></div>
-
         <div class="table-container">
             <div class="table-controls">
-                <div class="view-toggle">
-                    <button class="view-toggle-btn active" id="cardViewBtn" onclick="switchView('card')">
-                        📇 卡片视图
-                    </button>
-                    <button class="view-toggle-btn" id="tableViewBtn" onclick="switchView('table')">
-                        📊 表格视图
-                    </button>
-                </div>
                 <div class="page-size-control">
                     <span>每页显示</span>
                     <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
@@ -1977,11 +1719,11 @@ const HTML_CONTENT = `
     <script>
         // 分页变量
         const PAGE_SIZE_STORAGE_KEY = 'tablePageSize';
-        const VIEW_MODE_STORAGE_KEY = 'viewMode';
+
         let currentPage = 1;
         let itemsPerPage = getStoredPageSize() || 10; // 默认 10 条 / 页
         let allData = null;
-        let currentViewMode = localStorage.getItem(VIEW_MODE_STORAGE_KEY) || 'card'; // 默认卡片视图
+
 
         // 自动刷新变量
         let autoRefreshInterval = null;
@@ -2171,41 +1913,6 @@ const HTML_CONTENT = `
             }
         }
 
-        // 复制单个 Key - 优化版本(使用缓存)
-        async function copyKey(id, button) {
-            try {
-                let key = keyCache.get(id);
-                
-                if (!key) {
-                    const response = await fetch(\`/api/keys/\${id}/full\`);
-                    if (!response.ok) {
-                        throw new Error('获取完整 Key 失败');
-                    }
-                    const data = await response.json();
-                    key = data.key;
-                    keyCache.set(id, key);
-                }
-                
-                const success = await copyToClipboard(key);
-                
-                if (success) {
-                    button.classList.add('copied');
-                    button.innerHTML = '<span style="font-size: 18px;">✓</span>';
-                    button.title = '已复制';
-                    showToast('API Key 已复制到剪贴板');
-                    
-                    setTimeout(() => {
-                        button.classList.remove('copied');
-                        button.innerHTML = '<img src="https://images.icon-icons.com/4026/PNG/512/copy_icon_256034.png" class="btn-icon" alt="copy">';
-                        button.title = '复制 API Key';
-                    }, 2000);
-                } else {
-                    showToast('复制失败，请重试', true);
-                }
-            } catch (error) {
-                showToast('复制失败: ' + error.message, true);
-            }
-        }
 
         // 批量复制选中的 Keys - 优化版本(并发控制+缓存)
         async function batchCopyKeys() {
@@ -2321,13 +2028,13 @@ const HTML_CONTENT = `
                 allIds.forEach(id => selectedKeys.add(id));
             }
             
-            renderTable();
+            renderCards();
         }
 
         // 取消所有选择
         function clearSelection() {
             selectedKeys.clear();
-            renderTable();
+            renderCards();
         }
 
         // 更新批量操作工具栏
@@ -2378,6 +2085,112 @@ const HTML_CONTENT = `
                 return '0.00%';
             }
             return (ratio * 100).toFixed(2) + '%';
+        }
+
+        function formatUsedPercent(percent) {
+            if (percent === undefined || percent === null || Number.isNaN(Number(percent))) {
+                return '0%';
+            }
+            return Number(percent).toFixed(0) + '%';
+        }
+
+        function formatRemainingTime(seconds) {
+            if (seconds === undefined || seconds === null) {
+                return 'N/A';
+            }
+            const value = Math.max(0, Number(seconds));
+            const days = Math.floor(value / 86400);
+            const hours = Math.floor((value % 86400) / 3600);
+            const minutes = Math.floor((value % 3600) / 60);
+
+            if (days > 0) {
+                return hours > 0 ? days + 'd ' + hours + 'h' : days + 'd';
+            }
+            if (hours > 0) {
+                return minutes > 0 ? hours + 'h ' + minutes + 'm' : hours + 'h';
+            }
+            return minutes + 'm';
+        }
+
+        function formatWindowEnd(value) {
+            if (!value) {
+                return 'N/A';
+            }
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return 'N/A';
+            }
+            return date.toLocaleString('zh-CN', {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+            });
+        }
+
+        function getLimitStatus(percent) {
+            const value = Number(percent) || 0;
+            if (value >= 100) {
+                return { class: 'status-danger', progressClass: 'danger', text: '已用尽' };
+            }
+            if (value >= 80) {
+                return { class: 'status-warning', progressClass: 'warning', text: '即将用尽' };
+            }
+            return { class: 'status-good', progressClass: '', text: '正常' };
+        }
+
+        function renderLimitWindow(label, windowData) {
+            const percent = windowData?.usedPercent ?? 0;
+            const status = getLimitStatus(percent);
+            const width = Math.min(Math.max(percent, 0), 100);
+
+            return '<div class="limit-window-row">' +
+                '<div class="limit-window-meta">' +
+                    '<span class="limit-window-label">' + label + '</span>' +
+                    '<span class="limit-window-time">↻ ' + formatRemainingTime(windowData?.secondsRemaining) + '</span>' +
+                '</div>' +
+                '<div class="key-card-progress-bar compact">' +
+                    '<div class="key-card-progress-fill ' + status.progressClass + '" style="width: ' + width.toFixed(0) + '%"></div>' +
+                '</div>' +
+                '<div class="limit-window-footer">' +
+                    '<span>' + formatUsedPercent(percent) + '</span>' +
+                    '<span title="' + (windowData?.windowEnd || '') + '">' + formatWindowEnd(windowData?.windowEnd) + '</span>' +
+                '</div>' +
+            '</div>';
+        }
+
+        function renderLimitGroup(title, groupData) {
+            return '<div class="limit-group">' +
+                '<div class="limit-group-title">' + title + '</div>' +
+                renderLimitWindow('5-hour', groupData?.fiveHour) +
+                renderLimitWindow('Weekly', groupData?.weekly) +
+                renderLimitWindow('Monthly', groupData?.monthly) +
+            '</div>';
+        }
+
+        function renderExtraUsage(extra) {
+            const balance = ((extra?.extraUsageBalanceCents || 0) / 100).toFixed(2);
+            const allowedClass = extra?.extraUsageAllowed ? 'status-good' : 'status-warning';
+            const allowedText = extra?.extraUsageAllowed ? 'Allowed' : 'Closed';
+            return '<div class="extra-usage-row">' +
+                '<span class="usage-badge ' + allowedClass + '">Extra ' + allowedText + '</span>' +
+                '<span>余额 $' + balance + '</span>' +
+                '<span>Overage: ' + (extra?.overagePreference || '未开启') + '</span>' +
+            '</div>';
+        }
+
+
+
+
+
+        function renderExtraUsageCell(extra) {
+            const balance = ((extra?.extraUsageBalanceCents || 0) / 100).toFixed(2);
+            return '<div class="usage-cell extra">' +
+                '<span>' + (extra?.extraUsageAllowed ? 'Allowed' : 'Closed') + '</span>' +
+                '<span>$' + balance + '</span>' +
+                '<span>' + (extra?.overagePreference || 'No overage') + '</span>' +
+            '</div>';
         }
 
         function loadData() {
@@ -2453,58 +2266,9 @@ const HTML_CONTENT = `
         }
 
         function displayData(data) {
-            allData = data; // 保存数据
+            allData = data;
             document.getElementById('updateTime').textContent = \`最后更新: \${data.update_time} | 共 \${data.total_count} 个API Key\`;
-
-            const totalAllowance = data.totals.total_totalAllowance;
-            const totalUsed = data.totals.total_orgTotalTokensUsed;
-            const totalRemaining = data.totals.total_tokensRemaining;
-            const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
-
-            const statsCards = document.getElementById('statsCards');
-            const progressWidth = Math.min(overallRatio * 100, 100); // 限制最大100%
-            statsCards.innerHTML = \`
-                <div class="stat-card"><div class="label">总计额度 (Total Allowance)</div><div class="value">\${formatNumber(totalAllowance)}</div></div>
-                <div class="stat-card"><div class="label">已使用 (Total Used)</div><div class="value">\${formatNumber(totalUsed)}</div></div>
-                <div class="stat-card"><div class="label">剩余额度 (Remaining)</div><div class="value">\${formatNumber(totalRemaining)}</div></div>
-                <div class="stat-card">
-                    <div class="progress-background" style="width: \${progressWidth}%"></div>
-                    <div class="label">使用百分比 (Usage %)</div>
-                    <div class="value">\${formatPercentage(overallRatio)}</div>
-                </div>
-            \`;
-
-            // 根据当前视图模式渲染
-            if (currentViewMode === 'card') {
-                renderCards();
-            } else {
-                renderTable();
-            }
-        }
-
-        // 视图切换函数
-        function switchView(mode) {
-            currentViewMode = mode;
-            localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
-
-            // 更新按钮状态
-            document.getElementById('cardViewBtn').classList.toggle('active', mode === 'card');
-            document.getElementById('tableViewBtn').classList.toggle('active', mode === 'table');
-
-            // 显示/隐藏统计卡片区域
-            const statsCards = document.getElementById('statsCards');
-            if (statsCards) {
-                statsCards.style.display = mode === 'card' ? 'none' : 'grid';
-            }
-
-            // 重新渲染
-            if (allData) {
-                if (mode === 'card') {
-                    renderCards();
-                } else {
-                    renderTable();
-                }
-            }
+            renderCards();
         }
 
         // 获取状态类名和文本
@@ -2535,37 +2299,23 @@ const HTML_CONTENT = `
             const endIndex = isUnlimited ? totalItems : startIndex + itemsPerPage;
             const pageData = data.data.slice(startIndex, endIndex);
 
-            const totalAllowance = data.totals.total_totalAllowance;
-            const totalUsed = data.totals.total_orgTotalTokensUsed;
-            const totalRemaining = data.totals.total_tokensRemaining;
-            const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
-
             let cardsHTML = '<div class="cards-grid">';
 
-            // 总计卡片
-            cardsHTML += \`
-                <div class="key-card total-card">
-                    <div class="total-card-title">📊 总计统计 (Total Summary)</div>
-                    <div class="total-card-stats">
-                        <div class="total-card-stat">
-                            <div class="total-card-stat-label">总计额度</div>
-                            <div class="total-card-stat-value">\${formatNumber(totalAllowance)}</div>
-                        </div>
-                        <div class="total-card-stat">
-                            <div class="total-card-stat-label">已使用</div>
-                            <div class="total-card-stat-value">\${formatNumber(totalUsed)}</div>
-                        </div>
-                        <div class="total-card-stat">
-                            <div class="total-card-stat-label">剩余额度</div>
-                            <div class="total-card-stat-value">\${formatNumber(totalRemaining)}</div>
-                        </div>
-                        <div class="total-card-stat">
-                            <div class="total-card-stat-label">使用百分比</div>
-                            <div class="total-card-stat-value">\${formatPercentage(overallRatio)}</div>
-                        </div>
-                    </div>
-                </div>
-            \`;
+            if (!data.billingTotals) {
+                const totalAllowance = data.totals.total_totalAllowance;
+                const totalUsed = data.totals.total_orgTotalTokensUsed;
+                const totalRemaining = data.totals.total_tokensRemaining;
+                const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
+                cardsHTML += '<div class="key-card total-card">' +
+                    '<div class="total-card-title">总计统计 (Total Summary)</div>' +
+                    '<div class="total-card-stats">' +
+                        '<div class="total-card-stat"><div class="total-card-stat-label">总计额度</div><div class="total-card-stat-value">' + formatNumber(totalAllowance) + '</div></div>' +
+                        '<div class="total-card-stat"><div class="total-card-stat-label">已使用</div><div class="total-card-stat-value">' + formatNumber(totalUsed) + '</div></div>' +
+                        '<div class="total-card-stat"><div class="total-card-stat-label">剩余额度</div><div class="total-card-stat-value">' + formatNumber(totalRemaining) + '</div></div>' +
+                        '<div class="total-card-stat"><div class="total-card-stat-label">使用百分比</div><div class="total-card-stat-value">' + formatPercentage(overallRatio) + '</div></div>' +
+                    '</div>' +
+                '</div>';
+            }
 
             // 数据卡片
             pageData.forEach(item => {
@@ -2592,32 +2342,20 @@ const HTML_CONTENT = `
                         </div>
                     \`;
                 } else {
-                    const remaining = item.totalAllowance - item.orgTotalTokensUsed;
-                    const status = getStatusInfo(item.usedRatio, remaining);
-                    const progressClass = status.class === 'status-danger' ? 'danger' : 
-                                        (status.class === 'status-warning' ? 'warning' : '');
+                    const billing = item.billing || {};
+                    const standardMonthlyPercent = billing.standard?.monthly?.usedPercent ?? (item.usedRatio * 100);
+                    const status = getLimitStatus(standardMonthlyPercent);
 
                     cardsHTML += \`
                         <div class="key-card \${isChecked ? 'selected' : ''}">
                             <div class="key-card-header">
-                                <input type="checkbox" class="key-card-checkbox" \${isChecked ? 'checked' : ''} 
+                                <input type="checkbox" class="key-card-checkbox" \${isChecked ? 'checked' : ''}
                                        onchange="toggleSelection('\${item.id}'); renderCards();">
                                 <div class="key-card-id">\${item.id}</div>
                                 <span class="key-card-status \${status.class}">\${status.text}</span>
                             </div>
 
                             <div class="key-card-key" title="\${item.key}">\${item.key}</div>
-
-                            <div class="key-card-progress">
-                                <div class="key-card-progress-label">
-                                    <span>使用进度</span>
-                                    <span>\${formatPercentage(item.usedRatio)}</span>
-                                </div>
-                                <div class="key-card-progress-bar">
-                                    <div class="key-card-progress-fill \${progressClass}" 
-                                         style="width: \${(item.usedRatio * 100).toFixed(2)}%"></div>
-                                </div>
-                            </div>
 
                             <div class="key-card-stats">
                                 <div class="key-card-stat">
@@ -2630,20 +2368,15 @@ const HTML_CONTENT = `
                                 </div>
                                 <div class="key-card-stat">
                                     <div class="key-card-stat-label">剩余</div>
-                                    <div class="key-card-stat-value">\${formatNumber(remaining)}</div>
+                                    <div class="key-card-stat-value">\${formatNumber(Math.max(item.totalAllowance - item.orgTotalTokensUsed, 0))}</div>
                                 </div>
                             </div>
 
-                            <div class="key-card-dates">
-                                <div class="key-card-date">
-                                    <div class="key-card-date-label">开始时间</div>
-                                    <div class="key-card-date-value">\${item.startDate}</div>
-                                </div>
-                                <div class="key-card-date">
-                                    <div class="key-card-date-label">结束时间</div>
-                                    <div class="key-card-date-value">\${item.endDate}</div>
-                                </div>
+                            <div class="usage-limits-grid">
+                                \${renderLimitGroup('Standard Usage', billing.standard)}
                             </div>
+
+                            \${renderExtraUsage(billing)}
 
                             <div class="key-card-actions">
                                 <button class="key-card-btn key-card-btn-copy" 
@@ -2804,136 +2537,12 @@ const HTML_CONTENT = `
             }
         }
 
-        function renderTable() {
-            if (!allData) return;
-
-            const data = allData;
-            const totalItems = data.data.length;
-            const isUnlimited = itemsPerPage === Infinity;
-            const totalPages = isUnlimited ? 1 : Math.max(1, Math.ceil(totalItems / itemsPerPage));
-
-            if (currentPage > totalPages) {
-                currentPage = totalPages;
-            }
-
-            const startIndex = isUnlimited ? 0 : (currentPage - 1) * itemsPerPage;
-            const endIndex = isUnlimited ? totalItems : startIndex + itemsPerPage;
-            const pageData = data.data.slice(startIndex, endIndex);
-
-            const totalAllowance = data.totals.total_totalAllowance;
-            const totalUsed = data.totals.total_orgTotalTokensUsed;
-            const totalRemaining = data.totals.total_tokensRemaining;
-            const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
-
-            const allIds = data.data.map(item => item.id);
-            const allSelected = allIds.length > 0 && allIds.every(id => selectedKeys.has(id));
-
-            let tableHTML = \`
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="checkbox-cell"><input type="checkbox" \${allSelected ? 'checked' : ''} onchange="toggleSelectAll()" title="全选/取消全选"></th>
-                            <th>ID</th>
-                            <th>API Key</th>
-                            <th>开始时间</th>
-                            <th>结束时间</th>
-                            <th class="number">总计额度</th>
-                            <th class="number">已使用</th>
-                            <th class="number">剩余额度</th>
-                            <th class="number">使用百分比</th>
-                            <th style="text-align: center;">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>\`;
-
-            // 总计行放在第一行
-            tableHTML += \`
-                <tr class="total-row">
-                    <td class="checkbox-cell"></td>
-                    <td colspan="4">总计 (SUM)</td>
-                    <td class="number">\${formatNumber(totalAllowance)}</td>
-                    <td class="number">\${formatNumber(totalUsed)}</td>
-                    <td class="number">\${formatNumber(totalRemaining)}</td>
-                    <td class="number">\${formatPercentage(overallRatio)}</td>
-                    <td></td>
-                </tr>\`;
-
-            // 数据行 - 只显示当前页
-            pageData.forEach(item => {
-                const isChecked = selectedKeys.has(item.id);
-                if (item.error) {
-                    tableHTML += \`
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox" \${isChecked ? 'checked' : ''} onchange="toggleSelection('\${item.id}'); renderTable();"></td>
-                            <td class="id-cell">\${item.id}</td>
-                            <td class="key-cell" title="\${item.key}">\${item.key}</td>
-                            <td colspan="6" class="error-row">加载失败: \${item.error}</td>
-                            <td style="text-align: center;"><button class="table-delete-btn" onclick="deleteKeyFromTable('\${item.id}')">删除</button></td>
-                        </tr>\`;
-                } else {
-                    const remaining = item.totalAllowance - item.orgTotalTokensUsed;
-                    tableHTML += \`
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox" \${isChecked ? 'checked' : ''} onchange="toggleSelection('\${item.id}'); renderTable();"></td>
-                            <td class="id-cell">\${item.id}</td>
-                            <td class="key-cell" title="\${item.key}">\${item.key}</td>
-                            <td class="date-cell">\${item.startDate}</td>
-                            <td class="date-cell">\${item.endDate}</td>
-                            <td class="number">\${formatNumber(item.totalAllowance)}</td>
-                            <td class="number">\${formatNumber(item.orgTotalTokensUsed)}</td>
-                            <td class="number">\${formatNumber(remaining)}</td>
-                            <td class="number">\${formatPercentage(item.usedRatio)}</td>
-                            <td style="text-align: center;">
-                                <div class="action-buttons">
-                                    <button class="table-copy-btn" onclick="copyKey('\${item.id}', this)" title="复制 API Key">
-                                        <img src="https://images.icon-icons.com/4026/PNG/512/copy_icon_256034.png" class="btn-icon" alt="copy">
-                                    </button>
-                                    <button class="table-delete-btn" onclick="deleteKeyFromTable('\${item.id}')" title="删除">
-                                        <img src="https://images.icon-icons.com/4026/PNG/96/remove_delete_trash_icon_255976.png" class="btn-icon" alt="delete">
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>\`;
-                }
-            });
-
-            tableHTML += \`
-                    </tbody>
-                </table>\`;
-
-            // 添加分页控件
-            if (totalPages > 1 && !isUnlimited) {
-                tableHTML += \`<div class="pagination">\`;
-
-                // 上一页按钮
-                tableHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>❮ 上一页</button>\`;
-
-                // 页码信息
-                tableHTML += \`<span class="pagination-info">第 \${currentPage} / \${totalPages} 页 (共 \${data.data.length} 条)</span>\`;
-
-                // 下一页按钮
-                tableHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage + 1})" \${currentPage === totalPages ? 'disabled' : ''}>下一页 ❯</button>\`;
-
-                tableHTML += \`</div>\`;
-            }
-
-            document.getElementById('tableContent').innerHTML = tableHTML;
-            const pageSizeSelect = document.getElementById('pageSizeSelect');
-            if (pageSizeSelect) {
-                const selectValue = isUnlimited ? 'all' : String(itemsPerPage);
-                if (pageSizeSelect.value !== selectValue) {
-                    pageSizeSelect.value = selectValue;
-                }
-            }
-            updateBatchToolbar();
-        }
-
         function changePage(page) {
             if (!allData) return;
 
             if (itemsPerPage === Infinity) {
                 currentPage = 1;
-                renderTable();
+                renderCards();
                 return;
             }
 
@@ -2941,15 +2550,7 @@ const HTML_CONTENT = `
             if (page < 1 || page > totalPages) return;
 
             currentPage = page;
-            
-            // 根据当前视图模式渲染
-            if (currentViewMode === 'card') {
-                renderCards();
-            } else {
-                renderTable();
-            }
-
-            // 滚动到表格顶部
+            renderCards();
             document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
@@ -2967,14 +2568,7 @@ const HTML_CONTENT = `
                 console.error('保存分页设置失败:', error);
             }
             currentPage = 1;
-            
-            // 根据当前视图模式渲染
-            if (currentViewMode === 'card') {
-                renderCards();
-            } else {
-                renderTable();
-            }
-
+            renderCards();
             document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
@@ -3048,29 +2642,6 @@ const HTML_CONTENT = `
             }
         }
 
-        // Delete key from table - 从表格中删除密钥
-        async function deleteKeyFromTable(id) {
-            if (!confirm('确定要删除这个密钥吗？删除后需要刷新页面查看更新。')) {
-                return;
-            }
-
-            try {
-                const response = await fetch(\`/api/keys/\${id}\`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    // 删除成功后重新加载数据
-                    loadData();
-                } else {
-                    const data = await response.json();
-                    alert('删除失败: ' + data.error);
-                }
-            } catch (error) {
-                alert('删除失败: ' + error.message);
-            }
-        }
-
         // Clear zero balance keys - 清除零额度或负额度的密钥
         async function clearZeroBalanceKeys() {
             if (!allData) {
@@ -3078,19 +2649,23 @@ const HTML_CONTENT = `
                 return;
             }
 
-            // 找出剩余额度小于等于0的密钥
+            // 找出 Standard Monthly 已用尽的密钥，旧数据则沿用剩余额度判断
             const zeroBalanceKeys = allData.data.filter(item => {
                 if (item.error) return false;
+                const standardMonthly = item.billing?.standard?.monthly?.usedPercent;
+                if (typeof standardMonthly === 'number') {
+                    return standardMonthly >= 100;
+                }
                 const remaining = item.totalAllowance - item.orgTotalTokensUsed;
                 return remaining <= 0;
             });
 
             if (zeroBalanceKeys.length === 0) {
-                alert('没有需要清除的零额度密钥');
+                alert('没有需要清除的已用尽密钥');
                 return;
             }
 
-            if (!confirm(\`确定要删除 \${zeroBalanceKeys.length} 个零额度或负额度的密钥吗？此操作不可恢复！\`)) {
+            if (!confirm(\`确定要删除 \${zeroBalanceKeys.length} 个已用尽的密钥吗？此操作不可恢复！\`)) {
                 return;
             }
 
@@ -3309,18 +2884,7 @@ const HTML_CONTENT = `
                 }
             }
 
-            // Initialize theme first
             initTheme();
-
-            // 初始化视图按钮状态
-            document.getElementById('cardViewBtn').classList.toggle('active', currentViewMode === 'card');
-            document.getElementById('tableViewBtn').classList.toggle('active', currentViewMode === 'table');
-
-            // 初始化统计卡片显示状态
-            const statsCards = document.getElementById('statsCards');
-            if (statsCards) {
-                statsCards.style.display = currentViewMode === 'card' ? 'none' : 'grid';
-            }
 
             loadData();
             initAutoRefresh();
@@ -3331,51 +2895,153 @@ const HTML_CONTENT = `
 `;
 
 // Continue with API functions...
+const LIMIT_WINDOWS = ["fiveHour", "weekly", "monthly"];
+const LIMIT_GROUPS = ["standard", "core"];
+
+function normalizeLimitWindow(raw: any) {
+  return {
+    usedPercent: Number(raw?.usedPercent ?? 0),
+    windowEnd: raw?.windowEnd ?? null,
+    secondsRemaining: typeof raw?.secondsRemaining === "number" ? raw.secondsRemaining : null,
+  };
+}
+
+function normalizeLimitGroup(raw: any) {
+  return {
+    fiveHour: normalizeLimitWindow(raw?.fiveHour),
+    weekly: normalizeLimitWindow(raw?.weekly),
+    monthly: normalizeLimitWindow(raw?.monthly),
+  };
+}
+
+function normalizeBillingLimits(apiData: any) {
+  const limits = apiData?.limits ?? {};
+  return {
+    usesTokenRateLimitsBilling: Boolean(apiData?.usesTokenRateLimitsBilling),
+    standard: normalizeLimitGroup(limits.standard),
+    core: normalizeLimitGroup(limits.core),
+    extraUsageBalanceCents: Number(apiData?.extraUsageBalanceCents ?? 0),
+    extraUsageAllowed: Boolean(apiData?.extraUsageAllowed),
+    overagePreference: apiData?.overagePreference ?? null,
+    tokenRateLimitsRolloutEligible: Boolean(apiData?.tokenRateLimitsRolloutEligible),
+  };
+}
+
+function formatIsoDate(value: string | null) {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Invalid Date";
+  return date.toISOString().split("T")[0];
+}
+
+function summarizeLimitWindow(results: any[], group: string, windowName: string) {
+  const values = results
+    .map(item => item.billing?.[group]?.[windowName]?.usedPercent)
+    .filter(value => typeof value === "number" && Number.isFinite(value));
+
+  const count = values.length;
+  const total = values.reduce((sum, value) => sum + value, 0);
+
+  return {
+    avgUsedPercent: count > 0 ? total / count : 0,
+    maxUsedPercent: count > 0 ? Math.max(...values) : 0,
+    nearLimitCount: values.filter(value => value >= 80).length,
+    exhaustedCount: values.filter(value => value >= 100).length,
+  };
+}
+
+function buildBillingTotals(results: any[]) {
+  const totals: any = {
+    keyCount: results.length,
+    usesTokenRateLimitsBillingCount: results.filter(item => item.billing?.usesTokenRateLimitsBilling).length,
+    extra: {
+      extraUsageAllowedCount: results.filter(item => item.billing?.extraUsageAllowed).length,
+      extraUsageBalanceCentsTotal: results.reduce((sum, item) => sum + (item.billing?.extraUsageBalanceCents || 0), 0),
+      overageEnabledCount: results.filter(item => Boolean(item.billing?.overagePreference)).length,
+    },
+  };
+
+  LIMIT_GROUPS.forEach(group => {
+    totals[group] = {};
+    LIMIT_WINDOWS.forEach(windowName => {
+      totals[group][windowName] = summarizeLimitWindow(results, group, windowName);
+    });
+  });
+
+  return totals;
+}
+
 async function fetchApiKeyData(id: string, key: string) {
   try {
-    const response = await fetch('https://app.factory.ai/api/organization/members/chat-usage', {
-      headers: {
-        'Authorization': `Bearer ${key}`,
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
-      }
-    });
+    const [billingResponse, usageResponse] = await Promise.all([
+      fetch("https://api.factory.ai/api/billing/limits", {
+        headers: {
+          "Authorization": `Bearer ${key}`,
+          "X-Factory-Client": "cli",
+          "User-Agent": "Bun/1.3.13",
+          "Accept": "*/*",
+        },
+      }),
+      fetch("https://app.factory.ai/api/organization/members/chat-usage", {
+        headers: {
+          "Authorization": `Bearer ${key}`,
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        },
+      }).catch(() => null),
+    ]);
 
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`Error fetching data for key ID ${id}: ${response.status} ${errorBody}`);
-      return { id, key: `${key.substring(0, 4)}...`, error: `HTTP ${response.status}` };
+    if (!billingResponse.ok) {
+      const errorBody = await billingResponse.text();
+      console.error(`Error fetching billing limits for key ID ${id}: ${billingResponse.status} ${errorBody}`);
+      return { id, key: `${key.substring(0, 4)}...`, error: `HTTP ${billingResponse.status}` };
     }
 
-    const apiData = await response.json();
-    if (!apiData.usage || !apiData.usage.standard) {
-        return { id, key: `${key.substring(0, 4)}...`, error: 'Invalid API response structure' };
+    const apiData = await billingResponse.json();
+    if (!apiData.limits || !apiData.limits.standard) {
+      return { id, key: `${key.substring(0, 4)}...`, error: "Invalid API response structure" };
     }
 
-    const usageInfo = apiData.usage;
-    const standardUsage = usageInfo.standard;
-
-    const formatDate = (timestamp: number) => {
-        if (!timestamp && timestamp !== 0) return 'N/A';
-        try {
-            return new Date(timestamp).toISOString().split('T')[0];
-        } catch (e) {
-            return 'Invalid Date';
-        }
-    }
-
+    const billing = normalizeBillingLimits(apiData);
+    const standardMonthlyUsedPercent = billing.standard.monthly.usedPercent;
     const maskedKey = `${key.substring(0, 4)}...${key.substring(key.length - 4)}`;
+
+    let orgTotalTokensUsed = 0;
+    let totalAllowance = 0;
+    let startDate = "N/A";
+    let endDate = formatIsoDate(billing.standard.monthly.windowEnd);
+
+    if (usageResponse && usageResponse.ok) {
+      try {
+        const usageData = await usageResponse.json();
+        if (usageData.usage?.standard) {
+          const std = usageData.usage.standard;
+          orgTotalTokensUsed = std.orgTotalTokensUsed ?? 0;
+          totalAllowance = std.totalAllowance ?? 0;
+          if (usageData.usage.startDate) {
+            startDate = new Date(usageData.usage.startDate).toISOString().split("T")[0];
+          }
+          if (usageData.usage.endDate) {
+            endDate = new Date(usageData.usage.endDate).toISOString().split("T")[0];
+          }
+        }
+      } catch (_) {
+        // ignore usage API parse errors
+      }
+    }
+
     return {
       id,
       key: maskedKey,
-      startDate: formatDate(usageInfo.startDate),
-      endDate: formatDate(usageInfo.endDate),
-      orgTotalTokensUsed: standardUsage.orgTotalTokensUsed,
-      totalAllowance: standardUsage.totalAllowance,
-      usedRatio: standardUsage.usedRatio,
+      startDate,
+      endDate,
+      orgTotalTokensUsed,
+      totalAllowance,
+      usedRatio: totalAllowance > 0 ? orgTotalTokensUsed / totalAllowance : standardMonthlyUsedPercent / 100,
+      billing,
     };
   } catch (error) {
     console.error(`Failed to process key ID ${id}:`, error);
-    return { id, key: `${key.substring(0, 4)}...`, error: 'Failed to fetch' };
+    return { id, key: `${key.substring(0, 4)}...`, error: "Failed to fetch" };
   }
 }
 
@@ -3392,8 +3058,7 @@ async function getAggregatedData() {
   const totals = validResults.reduce((acc, res) => {
     acc.total_orgTotalTokensUsed += res.orgTotalTokensUsed || 0;
     acc.total_totalAllowance += res.totalAllowance || 0;
-    // 计算总 token 数量的时候，负数不计入内
-    acc.total_tokensRemaining += Math.max(res.totalAllowance - res.orgTotalTokensUsed, 0);
+    acc.total_tokensRemaining += Math.max((res.totalAllowance || 0) - (res.orgTotalTokensUsed || 0), 0);
     return acc;
   }, {
     total_orgTotalTokensUsed: 0,
@@ -3401,16 +3066,17 @@ async function getAggregatedData() {
     total_tokensRemaining: 0,
   });
 
+  const billingTotals = buildBillingTotals(validResults);
   const beijingTime = new Date(Date.now() + 8 * 60 * 60 * 1000);
 
   const keysWithBalance = validResults.filter(r => {
-    const remaining = (r.totalAllowance || 0) - (r.orgTotalTokensUsed || 0);
-    return remaining > 0;
+    const standardMonthly = r.billing?.standard?.monthly?.usedPercent ?? 100;
+    return standardMonthly < 100;
   });
 
   if (keysWithBalance.length > 0) {
     console.log("\n" + "=".repeat(80));
-    console.log("📋 剩余额度大于0的API Keys:");
+    console.log("📋 Standard Monthly 未用尽的API Keys:");
     console.log("-".repeat(80));
     keysWithBalance.forEach(item => {
       const originalEntry = keyEntries.find(e => e.id === item.id);
@@ -3420,13 +3086,14 @@ async function getAggregatedData() {
     });
     console.log("=".repeat(80) + "\n");
   } else {
-    console.log("\n⚠️  没有剩余额度大于0的API Keys\n");
+    console.log("\n⚠️  没有 Standard Monthly 未用尽的API Keys\n");
   }
 
   return {
     update_time: format(beijingTime, "yyyy-MM-dd HH:mm:ss"),
     total_count: keyEntries.length,
     totals,
+    billingTotals,
     data: results,
   };
 }
@@ -3474,7 +3141,7 @@ async function handler(req: Request): Promise<Response> {
         });
       }
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3514,7 +3181,7 @@ async function handler(req: Request): Promise<Response> {
       return new Response(JSON.stringify(data), { headers });
     } catch (error) {
       console.error(error);
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3533,7 +3200,7 @@ async function handler(req: Request): Promise<Response> {
       }));
       return new Response(JSON.stringify(safeKeys), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3556,7 +3223,7 @@ async function handler(req: Request): Promise<Response> {
       const result = await batchImportKeys(keys);
       return new Response(JSON.stringify(result), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3585,7 +3252,7 @@ async function handler(req: Request): Promise<Response> {
 
       return new Response(JSON.stringify({ id: keyEntry.id, key: keyEntry.key }), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3608,7 +3275,7 @@ async function handler(req: Request): Promise<Response> {
       const result = await batchDeleteKeys(ids);
       return new Response(JSON.stringify(result), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3629,7 +3296,7 @@ async function handler(req: Request): Promise<Response> {
       await deleteApiKey(id);
       return new Response(JSON.stringify({ success: true }), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });
@@ -3653,7 +3320,7 @@ async function handler(req: Request): Promise<Response> {
       await saveApiKey(id, key, name);
       return new Response(JSON.stringify({ success: true, id }), { headers });
     } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: getErrorMessage(error) }), {
         status: 500,
         headers,
       });

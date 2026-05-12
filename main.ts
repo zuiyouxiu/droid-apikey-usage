@@ -153,315 +153,108 @@ const LOGIN_PAGE = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录 - API 余额监控看板</title>
+    <title>登录</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
-            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #F1F5F9;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
-            transition: background 0.35s ease;
         }
-
-        /* Dark mode for login page body */
-        body[data-theme="dark"] {
-            background: linear-gradient(135deg, #0A84FF 0%, #6C5CE7 100%);
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 24px;
-            padding: 48px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        .login-card {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 44px 40px;
             max-width: 400px;
             width: 100%;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: background 0.35s ease, color 0.35s ease;
+            box-shadow: 0 4px 24px rgba(15,23,42,0.06);
         }
-
-        /* Dark mode styles for login page */
-        body[data-theme="dark"] .login-container {
-            background: #1C1C1E;
-            color: #F5F5F7;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        .login-logo {
+            width: 48px; height: 48px;
+            background: #EFF6FF;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px;
         }
-
-        body[data-theme="dark"] .login-container h1 {
-            color: #F5F5F7;
-        }
-
-        body[data-theme="dark"] .login-container p {
-            color: #98989D;
-        }
-
-        body[data-theme="dark"] label {
-            color: #F5F5F7;
-        }
-
-        body[data-theme="dark"] input[type="password"] {
-            background: #2C2C2E;
-            color: #F5F5F7;
-            border-color: rgba(255, 255, 255, 0.12);
-        }
-
-        body[data-theme="dark"] input[type="password"]:focus {
-            border-color: #0A84FF;
-            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
-        }
-
-        body[data-theme="dark"] .login-btn {
-            background: #0A84FF;
-        }
-
-        body[data-theme="dark"] .login-btn:hover {
-            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
-        }
-
-        /* Theme toggle for login page */
-        .login-theme-toggle {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
-        }
-
-        .login-theme-toggle:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        body[data-theme="dark"] .login-theme-toggle {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .login-icon {
-            font-size: 64px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            color: #1D1D1F;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        p {
-            text-align: center;
-            color: #86868B;
-            margin-bottom: 32px;
-            font-size: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1D1D1F;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
+        .login-logo svg { width: 24px; height: 24px; }
+        h1 { font-size: 22px; font-weight: 600; color: #0F172A; text-align: center; margin-bottom: 6px; }
+        .subtitle { font-size: 14px; color: #64748B; text-align: center; margin-bottom: 32px; }
+        label { display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px; }
+        .form-group { margin-bottom: 20px; }
         input[type="password"] {
-            width: 100%;
-            padding: 16px;
-            border: 1.5px solid rgba(0, 0, 0, 0.06);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            width: 100%; padding: 10px 14px;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 15px; font-family: inherit; color: #0F172A;
+            background: #fff; outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
-
         input[type="password"]:focus {
-            outline: none;
-            border-color: #007AFF;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
         }
-
         .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: #007AFF;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%; padding: 11px;
+            background: #2563EB; color: white;
+            border: none; border-radius: 10px;
+            font-size: 15px; font-weight: 500;
+            cursor: pointer; font-family: inherit;
+            transition: background 0.15s;
         }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
+        .login-btn:hover { background: #1D4ED8; }
+        .error-msg {
+            background: #FEF2F2; color: #DC2626;
+            border: 1px solid #FECACA;
+            padding: 10px 14px; border-radius: 8px;
+            font-size: 14px; margin-bottom: 16px; display: none;
         }
-
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
-        .error-message {
-            background: rgba(255, 59, 48, 0.1);
-            color: #FF3B30;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 59, 48, 0.2);
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-            animation: shake 0.4s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+        .error-msg.show { display: block; }
+        @media (max-width: 480px) {
+            .login-card { padding: 32px 24px; }
         }
     </style>
 </head>
 <body>
-    <button class="login-theme-toggle" id="loginThemeToggle" onclick="toggleLoginTheme()">🌙</button>
-    <div class="login-container">
-        <div class="login-icon">🔐</div>
-        <h1>欢迎回来</h1>
-        <p>请输入管理员密码以访问系统</p>
-
-        <div class="error-message" id="errorMessage">
-            密码错误，请重试
+    <div class="login-card">
+        <div class="login-logo">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#2563EB" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
         </div>
-
+        <h1>管理员登录</h1>
+        <p class="subtitle">输入密码以访问 API 监控看板</p>
+        <div class="error-msg" id="errorMessage">密码错误，请重试</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label for="password">密码</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="输入密码"
-                    autocomplete="current-password"
-                    required
-                >
+                <input type="password" id="password" placeholder="输入管理员密码" autocomplete="current-password" required>
             </div>
-
-            <button type="submit" class="login-btn">
-                登录
-            </button>
+            <button type="submit" class="login-btn">登录</button>
         </form>
     </div>
-
     <script>
-        // Initialize theme on page load
-        const THEME_STORAGE_KEY = 'themeMode';
-
-        function initTheme() {
-            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-            if (theme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-            }
-
-            // Update theme toggle button
-            updateLoginThemeButton();
-        }
-
-        function updateLoginThemeButton() {
-            const btn = document.getElementById('loginThemeToggle');
-            if (btn) {
-                const isDark = document.body.getAttribute('data-theme') === 'dark';
-                btn.textContent = isDark ? '☀️' : '🌙';
-            }
-        }
-
-        function toggleLoginTheme() {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            const newTheme = isDark ? 'light' : 'dark';
-
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-
-            if (newTheme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-            } else {
-                document.body.removeAttribute('data-theme');
-            }
-
-            updateLoginThemeButton();
-        }
-
-        // Call initTheme as soon as the body element exists
-        if (document.body) {
-            initTheme();
-        } else {
-            document.addEventListener('DOMContentLoaded', initTheme);
-        }
-
         async function handleLogin(event) {
             event.preventDefault();
-
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
-
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password }),
                 });
-
                 if (response.ok) {
                     window.location.href = '/';
                 } else {
                     errorMessage.classList.add('show');
                     document.getElementById('password').value = '';
                     document.getElementById('password').focus();
-
-                    setTimeout(() => {
-                        errorMessage.classList.remove('show');
-                    }, 3000);
+                    setTimeout(() => errorMessage.classList.remove('show'), 3000);
                 }
             } catch (error) {
                 alert('登录失败: ' + error.message);
@@ -479,1242 +272,966 @@ const HTML_CONTENT = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Droid API 余额监控看板</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Droid API 监控</title>
     <style>
-        /* Apple-inspired Design System with FiraCode */
+        /* Minimal Light Design System */
         :root {
-            /* Light Mode (Default) */
-            --color-primary: #007AFF;
-            --color-secondary: #5856D6;
-            --color-success: #34C759;
-            --color-warning: #FF9500;
-            --color-danger: #FF3B30;
-            --color-bg: #F5F5F7;
-            --color-surface: #FFFFFF;
-            --color-text-primary: #1D1D1F;
-            --color-text-secondary: #86868B;
-            --color-border: rgba(0, 0, 0, 0.06);
-            --color-shadow: rgba(0, 0, 0, 0.08);
-
-            /* Skip List - Keep light mode for UI elements in dark mode */
-            --skip-list-bg: #F5F5F7;
-
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --surface-2: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --accent: #2563EB;
+            --accent-light: #EFF6FF;
+            --success: #16A34A;
+            --success-light: #F0FDF4;
+            --warning: #D97706;
+            --warning-light: #FFFBEB;
+            --danger: #DC2626;
+            --danger-light: #FEF2F2;
+            --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+            --shadow-md: 0 4px 12px rgba(15,23,42,0.07);
+            --shadow-lg: 0 10px 30px rgba(15,23,42,0.08);
             --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 18px;
-            --radius-xl: 24px;
-            --spacing-xs: 8px;
-            --spacing-sm: 12px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
-            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --transition: 150ms ease;
         }
 
-        /* Dark Mode */
-        :root[data-theme="dark"] {
-            --color-primary: #0A84FF;
-            --color-secondary: #6C5CE7;
-            --color-success: #30D158;
-            --color-warning: #FF9F0A;
-            --color-danger: #FF453A;
-            --color-bg: #000000;
-            --color-surface: #1C1C1E;
-            --color-text-primary: #F5F5F7;
-            --color-text-secondary: #98989D;
-            --color-border: rgba(255, 255, 255, 0.12);
-            --color-shadow: rgba(0, 0, 0, 0.4);
-
-            /* Skip List - Keep light mode for UI elements in dark mode */
-            --skip-list-bg: #2C2C2E;
-        }
-
-        /* Dark mode for login page */
-        :root[data-theme="dark"] .login-container {
-            background: #1C1C1E;
-            color: #F5F5F7;
-        }
-
-        :root[data-theme="dark"] .login-container h1,
-        :root[data-theme="dark"] .login-container label {
-            color: #F5F5F7;
-        }
-
-        :root[data-theme="dark"] .login-container p {
-            color: #98989D;
-        }
-
-        :root[data-theme="dark"] input[type="password"] {
-            background: #2C2C2E;
-            color: #F5F5F7;
-            border-color: rgba(255, 255, 255, 0.12);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', sans-serif;
-            background: var(--color-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
             min-height: 100vh;
-            padding: var(--spacing-lg);
-            color: var(--color-text-primary);
+            color: var(--text-primary);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
         }
 
-        /* FiraCode for code/numbers - Scale 1.25x and anti-aliasing */
         .code-font, .key-masked, #importKeys {
-            font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Courier New', monospace;
-            font-feature-settings: "liga" 1, "calt" 1;
-            -webkit-font-smoothing: subpixel-antialiased;
-            -moz-osx-font-smoothing: auto;
-            text-rendering: optimizeLegibility;
+            font-family: Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
         }
 
-        .container {
-            max-width: 2400px;
-            margin: 0 auto;
-            background: var(--color-surface);
-            border-radius: var(--radius-xl);
-            box-shadow: 0 8px 30px var(--color-shadow);
-            overflow: hidden;
-        }
-
+        /* Header */
         .header {
-            position: relative;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-            padding: var(--spacing-lg) var(--spacing-lg);
-            text-align: center;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-        }
-
-        .header .update-time {
-            font-size: 15px;
-            opacity: 0.85;
-            font-weight: 400;
-        }
-
-        .table-container {
-            padding: 0 var(--spacing-xl) var(--spacing-xl);
-            overflow-x: visible;
-        }
-
-        .table-controls {
-            margin: 1rem;
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 58px;
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .header-refresh-info {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 13px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: background var(--transition), color var(--transition), border-color var(--transition);
+            line-height: 1;
+        }
+
+        .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+        .btn-outline {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+        .btn-outline:hover { background: var(--surface-2); color: var(--text-primary); }
+
+        /* Main content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 24px;
+        }
+
+        /* Controls bar */
+        .table-controls { margin-bottom: 14px; }
+
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .page-size-control {
+        .select-wrap {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            font-size: 14px;
-            color: var(--color-text-secondary);
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
         .page-size-select {
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.12);
-            border-radius: var(--radius-md);
-            background: var(--color-surface);
-            color: var(--color-text);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .page-size-select:focus {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+            font-family: inherit;
         }
+        .page-size-select:focus { border-color: var(--accent); }
 
-
-
-        /* 批量操作相关样式 */
+        /* Batch toolbar */
         .batch-toolbar {
-            position: sticky;
-            top: 0;
-            z-index: 200;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--surface);
+            border: 1.5px solid #BFDBFE;
+            border-radius: var(--radius-lg);
+            padding: 10px 14px;
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
+            gap: 10px;
             justify-content: space-between;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 14px;
+            flex-wrap: wrap;
         }
 
         .batch-toolbar-left {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
         }
 
         .batch-toolbar-right {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .batch-count {
-            font-size: 16px;
-            font-weight: 600;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .batch-btn {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
             border-radius: var(--radius-sm);
-            padding: 8px 16px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            border: 1px solid #BFDBFE;
+            transition: background var(--transition);
+            white-space: nowrap;
+            font-family: inherit;
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .batch-btn:hover { background: #DBEAFE; }
+
+        .batch-btn.danger {
+            background: var(--danger-light);
+            color: var(--danger);
+            border-color: #FECACA;
+        }
+        .batch-btn.danger:hover { background: #FEE2E2; }
+
+        /* Cards grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 14px;
+        }
+
+        /* Key card */
+        .key-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            transition: box-shadow var(--transition), border-color var(--transition);
+        }
+
+        .key-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: #CBD5E1;
+        }
+
+        .key-card.selected {
+            border-color: var(--accent);
+            background: #FAFCFF;
+        }
+
+        .key-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .key-card-checkbox {
+            width: 15px; height: 15px;
+            cursor: pointer;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .key-card-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: Consolas, 'Courier New', monospace;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        .batch-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+        .key-card-status {
+            padding: 2px 9px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
-        .batch-btn.danger {
-            background: var(--color-danger);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .status-good { background: var(--success-light); color: var(--success); }
+        .status-warning { background: var(--warning-light); color: var(--warning); }
+        .status-danger { background: var(--danger-light); color: var(--danger); }
+
+        .key-card-key {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--surface-2);
+            padding: 7px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .batch-btn.danger:hover {
-            background: #D32F2F;
+        .key-card-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: 12px;
         }
 
-        /* Toast 提示样式 */
-        .toast {
-            position: fixed;
-            top: var(--spacing-xl);
-            right: var(--spacing-xl);
-            background: var(--color-surface);
-            color: var(--color-text-primary);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-md);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        .key-card-stat {
+            background: var(--surface);
+            padding: 10px 6px;
+            text-align: center;
+        }
+
+        .key-card-stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .key-card-stat-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        .key-card-dates {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 10px;
+            background: var(--surface-2);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+
+        .key-card-date { display: flex; flex-direction: column; gap: 2px; }
+
+        .key-card-date-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .key-card-date-value {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .usage-limits-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .limit-group {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            background: var(--surface-2);
+        }
+
+        .limit-group-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+        }
+
+        .limit-window-row { margin-bottom: 8px; }
+        .limit-window-row:last-child { margin-bottom: 0; }
+
+        .limit-window-meta, .limit-window-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+
+        .limit-window-label { color: var(--text-primary); font-weight: 500; }
+
+        .key-card-progress-bar {
+            height: 5px;
+            background: var(--border);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .key-card-progress-bar.compact { height: 4px; margin: 3px 0; }
+
+        .key-card-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 100px;
+            transition: width 0.5s ease;
+        }
+        .key-card-progress-fill.warning { background: var(--warning); }
+        .key-card-progress-fill.danger { background: var(--danger); }
+
+        .extra-usage-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--surface-2);
+        }
+
+        .usage-badge {
+            padding: 2px 7px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .key-card-actions {
+            display: flex;
+            gap: 7px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 12px;
+        }
+
+        .key-card-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background var(--transition);
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            justify-content: center;
+            gap: 5px;
+            font-family: inherit;
+        }
+
+        .key-card-btn-copy { background: var(--accent-light); color: var(--accent); }
+        .key-card-btn-copy:hover { background: #DBEAFE; }
+        .key-card-btn-copy.copied { background: var(--success-light); color: var(--success); }
+
+        .key-card-btn-delete { background: var(--danger-light); color: var(--danger); }
+        .key-card-btn-delete:hover { background: #FEE2E2; }
+
+        .key-card-env-group {
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 10px;
+        }
+
+        .key-card-env-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 7px;
+        }
+
+        .key-card-env-buttons { display: flex; gap: 7px; }
+
+        .key-card-btn-env {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+        .key-card-btn-env:hover { background: var(--accent-light); color: var(--accent); border-color: #BFDBFE; }
+        .key-card-btn-env.copied { background: var(--success-light); color: var(--success); border-color: #BBF7D0; }
+
+        /* Total card */
+        .total-card {
+            grid-column: 1 / -1;
+            background: var(--surface);
+            border: 1px solid #BFDBFE;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .total-card-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+        }
+
+        .total-card-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .total-card-stat { text-align: center; }
+
+        .total-card-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .total-card-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E293B;
+            color: white;
+            padding: 9px 18px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
             z-index: 10000;
-            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
-            border-left: 4px solid var(--color-success);
+            animation: toastIn 0.2s ease, toastOut 0.2s ease 2.8s forwards;
+            white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(15,23,42,0.15);
         }
 
-        .toast.error {
-            border-left-color: var(--color-danger);
+        .toast.error { background: var(--danger); }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeOut {
+        @keyframes toastOut {
             from { opacity: 1; }
             to { opacity: 0; }
         }
 
-        .toast-icon {
-            font-size: 20px;
-        }
-
-        .toast-message {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .refresh-btn {
+        /* Floating action buttons */
+        .fab-group {
             position: fixed;
-            bottom: var(--spacing-xl);
-            right: var(--spacing-xl);
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 100px;
-            padding: 16px 28px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.35);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
+            bottom: 28px;
+            right: 28px;
             z-index: 100;
         }
 
-        .refresh-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0, 122, 255, 0.45);
-        }
-
-        .refresh-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .clear-zero-btn {
-            position: fixed;
-            bottom: calc(var(--spacing-xl) + 70px);
-            right: var(--spacing-xl);
-            background: var(--color-danger);
-            color: white;
-            border: none;
-            border-radius: 100px;
-            padding: 16px 28px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(255, 59, 48, 0.35);
-            transition: var(--transition);
+        .fab {
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs);
-            z-index: 100;
+            gap: 9px;
+            padding: 13px 22px;
+            border: none;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.01em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .clear-zero-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(255, 59, 48, 0.45);
+        .fab svg { width: 17px; height: 17px; flex-shrink: 0; transition: transform 0.4s ease; }
+        .fab:hover { transform: translateY(-3px); }
+        .fab:hover svg { transform: rotate(60deg); }
+        .fab:active { transform: translateY(-1px); }
+
+        .fab-refresh {
+            background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(37,99,235,0.38), 0 2px 6px rgba(37,99,235,0.2);
+        }
+        .fab-refresh:hover {
+            box-shadow: 0 10px 28px rgba(37,99,235,0.48), 0 4px 10px rgba(37,99,235,0.25);
         }
 
-        .clear-zero-btn:active {
-            transform: translateY(-1px);
+        .spinner {
+            width: 15px; height: 15px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: inline-block;
+            flex-shrink: 0;
         }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .loading {
             text-align: center;
-            padding: 60px 20px;
-            color: var(--color-text-secondary);
+            padding: 60px 24px;
             font-size: 15px;
+            color: var(--text-muted);
         }
 
         .error {
             text-align: center;
-            padding: 60px 20px;
-            color: var(--color-danger);
+            padding: 60px 24px;
             font-size: 15px;
+            color: var(--danger);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 100px;
-            padding: 8px 12px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
+        /* Pagination */
+        .pagination {
             display: flex;
-            align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            align-items: center;
+            gap: 6px;
+            padding: 20px 0;
         }
 
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
-        }
-
-        .manage-btn {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 100px;
-            padding: 8px 16px;
+        .pagination-btn {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 7px 14px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all var(--transition);
+            font-family: inherit;
         }
 
-        .manage-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
+        .pagination-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
+        .pagination-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .pagination-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .pagination-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 0 6px;
         }
 
-        /* Dark mode overlay styles for header buttons */
-        :root[data-theme="dark"] .theme-toggle-btn,
-        :root[data-theme="dark"] .manage-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        :root[data-theme="dark"] .theme-toggle-btn:hover,
-        :root[data-theme="dark"] .manage-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
+        /* Manage panel */
         .manage-panel {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            inset: 0;
+            background: rgba(15,23,42,0.4);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: var(--spacing-lg);
-            animation: fadeIn 0.3s ease;
+            padding: 24px;
+            animation: fadeIn 0.2s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .manage-content {
-            background: var(--color-surface);
+            background: var(--surface);
             border-radius: var(--radius-xl);
-            max-width: 1000px;
+            max-width: 560px;
             width: 100%;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+            animation: slideUp 0.25s ease;
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .manage-header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-            padding: var(--spacing-lg) var(--spacing-xl);
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .manage-header h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
         .close-btn {
-            position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
+            background: none;
             border: none;
-            color: white;
-            font-size: 22px;
+            width: 30px; height: 30px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            z-index: 10;
+            transition: all var(--transition);
         }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: rotate(90deg);
-        }
+        .close-btn:hover { background: var(--surface-2); color: var(--text-primary); }
+        .close-btn svg { width: 16px; height: 16px; }
 
         .manage-body {
-            padding: var(--spacing-xl);
+            padding: 20px;
             overflow-y: auto;
             flex: 1;
         }
 
-        .import-section {
-            margin-bottom: 0;
+        .manage-section { margin-bottom: 24px; }
+        .manage-section:last-child { margin-bottom: 0; }
+
+        .manage-section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
         }
 
-        .import-section h3 {
-            margin: 0 0 var(--spacing-md) 0;
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--color-text-primary);
-            letter-spacing: -0.3px;
+        .manage-section-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .manage-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 0 24px;
         }
 
         #importKeys {
             width: 100%;
-            padding: var(--spacing-md);
-            border: 1.5px solid var(--color-border);
+            padding: 9px 12px;
+            border: 1.5px solid var(--border);
             border-radius: var(--radius-md);
-            font-size: 15px;
+            font-size: 13px;
             resize: vertical;
-            transition: var(--transition);
             line-height: 1.8;
-            min-height: 150px;
-        }
-
-        #importKeys:focus {
+            min-height: 110px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: var(--text-primary);
+            background: var(--surface);
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            transition: border-color var(--transition);
         }
+        #importKeys:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
 
         .import-btn {
-            margin-top: var(--spacing-md);
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            padding: 12px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
+            margin-top: 10px;
             display: inline-flex;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background var(--transition);
+            font-family: inherit;
         }
+        .import-btn:hover { background: #1D4ED8; }
 
-        .import-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
-        }
+        .import-btn.success { background: #16A34A; }
+        .import-btn.success:hover { background: #15803D; }
 
-        .import-btn:active {
-            transform: translateY(0);
+        .import-btn.secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
         }
+        .import-btn.secondary:hover { background: var(--surface-2); color: var(--text-primary); }
 
         .import-result {
-            margin-top: var(--spacing-md);
-            padding: var(--spacing-md);
+            margin-top: 10px;
+            padding: 9px 12px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .import-result.success {
-            background: rgba(52, 199, 89, 0.1);
-            color: var(--color-success);
-            border: 1px solid rgba(52, 199, 89, 0.2);
-        }
-
-        .import-result.error {
-            background: rgba(255, 59, 48, 0.1);
-            color: var(--color-danger);
-            border: 1px solid rgba(255, 59, 48, 0.2);
-        }
-
-        .keys-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .keys-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .keys-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .keys-list::-webkit-scrollbar-thumb {
-            background: var(--color-border);
-            border-radius: 100px;
-        }
-
-        .keys-list::-webkit-scrollbar-thumb:hover {
-            background: var(--color-text-secondary);
-        }
-
-        /* 分页样式 */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-lg);
-            padding: var(--spacing-lg) 0;
-        }
-
-        .pagination-btn {
-            background: var(--color-surface);
-            color: var(--color-text-primary);
-            border: 1.5px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            padding: 10px 16px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            min-width: 40px;
-        }
-
-        .pagination-btn:hover:not(:disabled) {
-            background: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
-            transform: translateY(-2px);
-        }
-
-        .pagination-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .pagination-btn.active {
-            background: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
-        }
-
-        .pagination-info {
-            font-size: 16px;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-            padding: 0 var(--spacing-md);
-        }
-
-        .key-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: calc(var(--spacing-md) * 1.25);
-            background: var(--color-bg);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--spacing-sm);
-            transition: var(--transition);
-            border: 1px solid transparent;
-        }
-
-        .key-item:hover {
-            background: rgba(0, 122, 255, 0.04);
-            border-color: rgba(0, 122, 255, 0.1);
-        }
-
-        .key-info { flex: 1; }
-
-        .key-id {
-            font-weight: 600;
-            color: var(--color-text-primary);
-            font-size: 16px;
-            margin-bottom: 6px;
-        }
-
-        .key-masked {
-            color: var(--color-text-secondary);
-            font-size: 14px;
-        }
-
-        .delete-btn {
-            background: var(--color-danger);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .delete-btn:hover {
-            background: #D32F2F;
-            transform: scale(1.05);
-        }
-
-        .delete-btn:active {
-            transform: scale(0.98);
-        }
-
-
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: var(--spacing-lg);
-            padding: 0;
-        }
-
-        .key-card {
-            background: var(--color-surface);
-            border: 2px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .key-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px var(--color-shadow);
-            border-color: var(--color-primary);
-        }
-
-        .key-card.selected {
-            border-color: var(--color-primary);
-            background: rgba(0, 122, 255, 0.02);
-        }
-
-        .key-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
-            gap: var(--spacing-md);
-        }
-
-        .key-card-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            accent-color: var(--color-primary);
-            flex-shrink: 0;
-        }
-
-        .key-card-id {
-            font-size: 14px;
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            font-family: 'Fira Code', monospace;
-            flex: 1;
-        }
-
-        .key-card-status {
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .key-card-status.status-good {
-            background: rgba(52, 199, 89, 0.15);
-            color: var(--color-success);
-        }
-
-        .key-card-status.status-warning {
-            background: rgba(255, 149, 0, 0.15);
-            color: var(--color-warning);
-        }
-
-        .key-card-status.status-danger {
-            background: rgba(255, 59, 48, 0.15);
-            color: var(--color-danger);
-        }
-
-        .key-card-key {
-            font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            color: var(--color-text-primary);
-            background: var(--color-bg);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            margin-bottom: var(--spacing-md);
-            word-break: break-all;
-            font-weight: 500;
-        }
-
-        .key-card-progress {
-            margin-bottom: var(--spacing-md);
-        }
-
-        .key-card-progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-xs);
             font-size: 13px;
-            font-weight: 600;
-            color: var(--color-text-secondary);
+            font-weight: 500;
         }
+        .import-result.success { background: var(--success-light); color: var(--success); border: 1px solid #BBF7D0; }
+        .import-result.error { background: var(--danger-light); color: var(--danger); border: 1px solid #FECACA; }
 
-        .key-card-progress-bar {
-            height: 10px;
-            background: var(--color-bg);
-            border-radius: 100px;
-            overflow: hidden;
-            position: relative;
+        .import-btn.danger-btn {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1px solid #FECACA;
         }
+        .import-btn.danger-btn:hover { background: #FEE2E2; }
+        .import-btn.danger-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .key-card-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-            border-radius: 100px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .key-card-progress-fill.warning {
-            background: linear-gradient(90deg, var(--color-warning), #FF6B00);
-        }
-
-        .key-card-progress-fill.danger {
-            background: linear-gradient(90deg, var(--color-danger), #D32F2F);
-        }
-
-        .key-card-progress-bar.compact {
-            height: 8px;
-            margin: 6px 0;
-        }
-
-        .usage-limits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .limit-group {
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-md);
-            background: var(--color-bg);
-        }
-
-        .limit-group-title {
-            color: var(--color-text-primary);
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .limit-window-row + .limit-window-row {
-            margin-top: var(--spacing-sm);
-        }
-
-        .limit-window-meta,
-        .limit-window-footer {
+        .refresh-settings-row {
             display: flex;
-            justify-content: space-between;
-            gap: var(--spacing-sm);
-            color: var(--color-text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .limit-window-label {
-            color: var(--color-text-primary);
-        }
-
-        .extra-usage-row {
-            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-md);
-            padding: var(--spacing-sm);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            color: var(--color-text-secondary);
-            font-size: 13px;
-            font-weight: 600;
-            background: var(--color-bg);
         }
 
-        .usage-badge {
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .usage-badge.status-good {
-            background: rgba(52, 199, 89, 0.15);
-            color: var(--color-success);
-        }
-
-        .usage-badge.status-warning {
-            background: rgba(255, 149, 0, 0.15);
-            color: var(--color-warning);
-        }
-
-        .key-card-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
-            padding-top: var(--spacing-md);
-            border-top: 1px solid var(--color-border);
-        }
-
-        .key-card-stat {
-            text-align: center;
-        }
-
-        .key-card-stat-label {
-            font-size: 11px;
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .key-card-stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--color-text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-        }
-
-        .key-card-dates {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-md);
-            padding: var(--spacing-sm);
-            background: var(--color-bg);
-            border-radius: var(--radius-sm);
-            font-size: 12px;
-            color: var(--color-text-secondary);
-        }
-
-        .key-card-date {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .key-card-date-label {
-            font-weight: 600;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .key-card-date-value {
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-        }
-
-        .key-card-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-            padding-top: var(--spacing-md);
-            border-top: 1px solid var(--color-border);
-        }
-
-        .key-card-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
+        #refreshInterval {
+            width: 90px;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border);
             border-radius: var(--radius-sm);
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
+            font-family: Consolas, 'Courier New', monospace;
+            color: var(--text-primary);
+            background: var(--surface);
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        #refreshInterval:focus { border-color: var(--accent); }
+
+        .refresh-unit { font-size: 13px; color: var(--text-secondary); }
+
+        .refresh-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+
+        #refreshStatus {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
         }
 
-        .key-card-btn-copy {
-            background: var(--color-primary);
-            color: white;
-        }
-
-        .key-card-btn-copy:hover {
-            background: #0056D2;
-            transform: translateY(-2px);
-        }
-
-        .key-card-btn-copy.copied {
-            background: var(--color-success);
-        }
-
-        .key-card-btn-delete {
-            background: var(--color-danger);
-            color: white;
-        }
-
-        .key-card-btn-delete:hover {
-            background: #D32F2F;
-            transform: translateY(-2px);
-        }
-
-        .key-card-env-group {
-            padding-top: var(--spacing-sm);
-            border-top: 1px solid var(--color-border);
-            margin-top: var(--spacing-sm);
-        }
-
-        .key-card-env-title {
-            font-size: 11px;
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: var(--spacing-xs);
-            text-align: center;
-        }
-
-        .key-card-env-buttons {
-            display: flex;
-            gap: var(--spacing-xs);
-        }
-
-        .key-card-btn-env {
-            flex: 1;
-            padding: 10px;
-            border: 1.5px solid var(--color-border);
-            background: var(--color-surface);
-            color: var(--color-text-primary);
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .key-card-btn-env:hover {
-            background: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
-            transform: translateY(-2px);
-        }
-
-        .key-card-btn-env.copied {
-            background: var(--color-success);
-            color: white;
-            border-color: var(--color-success);
-        }
-
-        /* 总计卡片样式 */
-        .total-card {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(88, 86, 214, 0.12) 100%);
-            border: 2px solid var(--color-primary);
-            padding: var(--spacing-xl);
-        }
-
-        .total-card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-lg);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .total-card-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-lg);
-        }
-
-        .total-card-stat {
-            text-align: center;
-        }
-
-        .total-card-stat-label {
-            font-size: 13px;
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .total-card-stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--color-primary);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            body { padding: var(--spacing-sm); }
-            .header { padding: var(--spacing-md); }
-            .header h1 { font-size: 24px; }
-            .table-container {
-                padding: 0 var(--spacing-md) var(--spacing-lg);
-                overflow-x: scroll;
-            }
-            table {
-                transform: scale(1);
-                margin-bottom: var(--spacing-lg);
-            }
-            .manage-btn {
-                position: static;
-                margin-top: var(--spacing-md);
-                width: 100%;
-            }
-            .refresh-btn {
-                bottom: var(--spacing-md);
-                right: var(--spacing-md);
-                padding: 14px 24px;
-            }
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .key-card-stats {
-                grid-template-columns: 1fr;
-            }
+            .header { padding: 0 16px; }
+            .header-inner { height: auto; min-height: 56px; padding: 10px 0; flex-wrap: wrap; }
+            .header-refresh-info { display: none; }
+            .main { padding: 14px 16px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .fab-group { bottom: 20px; right: 20px; }
+            .fab { padding: 12px 18px; font-size: 13px; }
+        }
+
+        @media (max-width: 480px) {
+            .manage-content { max-height: 95vh; }
+            .manage-body { padding: 14px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚀 Droid API 余额监控看板</h1>
-            <div class="update-time" id="updateTime">正在加载...</div>
-            <div style="margin-top: 4px; font-size: 13px; opacity: 0.85;">
-                <span id="autoRefreshStatus">自动刷新: 启用中 | 下次刷新: <span id="headerNextRefresh">计算中...</span></span>
+    <div class="header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="header-title">Droid API 余额监控</div>
+                <div class="header-meta" id="updateTime">加载中...</div>
             </div>
-            <div style="position: absolute; top: var(--spacing-md); right: var(--spacing-md); display: flex; gap: var(--spacing-sm);">
-                <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
-                <button class="manage-btn" onclick="toggleManagePanel()">⚙️ 管理密钥</button>
-            </div>
-        </div>
-
-        <!-- Management Panel -->
-        <div class="manage-panel" id="managePanel" style="display: none;">
-            <div class="manage-content">
-                <button class="close-btn" onclick="toggleManagePanel()">✕</button>
-                <div class="manage-header">
-                    <h2>批量导入密钥</h2>
-                </div>
-                <div class="manage-body">
-                    <div class="import-section">
-                        <h3>📦 添加 API Key</h3>
-                        <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: var(--spacing-md);">
-                            每行粘贴一个 API Key，支持批量导入数百个密钥
-                        </p>
-                        <textarea id="importKeys" placeholder="每行粘贴一个 API Key&#10;fk-xxxxx&#10;fk-yyyyy&#10;fk-zzzzz" rows="10"></textarea>
-                        <button class="import-btn" onclick="importKeys()">
-                            <span id="importSpinner" style="display: none;" class="spinner"></span>
-                            <span id="importText">🚀 导入密钥</span>
-                        </button>
-                        <div id="importResult" class="import-result"></div>
-                    </div>
-
-                    <div class="import-section" style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1.5px solid var(--color-border);">
-                        <h3>⏱️ 自动刷新设置</h3>
-                        <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: var(--spacing-md);">
-                            设置自动刷新间隔时间（分钟）
-                        </p>
-                        <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
-                            <input type="number" id="refreshInterval" min="1" max="1440" value="30"
-                                   style="width: 120px; padding: 12px; border: 1.5px solid var(--color-border); border-radius: var(--radius-md); font-size: 15px; font-family: 'Fira Code', monospace;">
-                            <span style="color: var(--color-text-secondary); font-size: 15px;">分钟</span>
-                        </div>
-                        <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
-                            <button class="import-btn" onclick="saveRefreshSettings()" style="background: var(--color-success);">
-                                💾 保存设置
-                            </button>
-                            <button class="import-btn" onclick="toggleAutoRefresh()" id="toggleRefreshBtn" style="background: var(--color-secondary);">
-                                ⏸️ 暂停自动刷新
-                            </button>
-                        </div>
-                        <div id="refreshStatus" style="color: var(--color-text-secondary); font-size: 14px; font-weight: 500;">
-                            下次刷新: <span id="nextRefreshDisplay">计算中...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <div class="table-controls">
-                <div class="page-size-control">
-                    <span>每页显示</span>
-                    <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
-                        <option value="10">10 条</option>
-                        <option value="30">30 条</option>
-                        <option value="100">100 条</option>
-                        <option value="all">全部</option>
-                    </select>
-                </div>
-            </div>
-            <div id="tableContent">
-                <div class="loading">正在加载数据...</div>
+            <div class="header-right">
+                <span class="header-refresh-info">
+                    <span id="autoRefreshStatus">自动刷新 · <span id="headerNextRefresh">计算中...</span></span>
+                </span>
+                <button class="btn btn-outline" onclick="toggleManagePanel()">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    管理密钥
+                </button>
             </div>
         </div>
     </div>
 
-    <button class="clear-zero-btn" onclick="clearZeroBalanceKeys()">
-        <span class="spinner" style="display: none;" id="clearSpinner"></span>
-        <span id="clearBtnText">🗑️ 清除零额度</span>
-    </button>
+    <!-- Management Panel -->
+    <div class="manage-panel" id="managePanel" style="display: none;">
+        <div class="manage-content">
+            <div class="manage-header">
+                <h2>密钥管理</h2>
+                <button class="close-btn" onclick="toggleManagePanel()">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="manage-body">
+                <div class="manage-section">
+                    <h3>批量导入 API Key</h3>
+                    <p class="manage-section-desc">每行粘贴一个 API Key，支持批量导入</p>
+                    <textarea id="importKeys" placeholder="每行一个 API Key&#10;fk-xxxxx&#10;fk-yyyyy" rows="8"></textarea>
+                    <button class="import-btn" onclick="importKeys()">
+                        <span id="importSpinner" style="display: none;" class="spinner"></span>
+                        <span id="importText">导入</span>
+                    </button>
+                    <div id="importResult" class="import-result"></div>
+                </div>
 
-    <button class="refresh-btn" onclick="loadData()">
-        <span class="spinner" style="display: none;" id="spinner"></span>
-        <span id="btnText">🔄 刷新数据</span>
-    </button>
+                <div class="manage-divider"></div>
+
+                <div class="manage-section">
+                    <h3>自动刷新设置</h3>
+                    <p class="manage-section-desc">设置自动刷新间隔（分钟）</p>
+                    <div class="refresh-settings-row">
+                        <input type="number" id="refreshInterval" min="1" max="1440" value="30">
+                        <span class="refresh-unit">分钟</span>
+                    </div>
+                    <div class="refresh-btns">
+                        <button class="import-btn success" onclick="saveRefreshSettings()">保存</button>
+                        <button class="import-btn secondary" onclick="toggleAutoRefresh()" id="toggleRefreshBtn">暂停刷新</button>
+                    </div>
+                    <div id="refreshStatus">下次刷新: <span id="nextRefreshDisplay">计算中...</span></div>
+                </div>
+
+                <div class="manage-divider"></div>
+
+                <div class="manage-section">
+                    <h3>批量删除</h3>
+                    <p class="manage-section-desc">删除已用尽（月额度 100%）的密钥，或批量删除选中的密钥</p>
+                    <div class="refresh-btns">
+                        <button class="import-btn danger-btn" id="clearZeroBtn" onclick="clearZeroBalanceKeys(this)">
+                            清除已用尽密钥
+                        </button>
+                    </div>
+                    <div id="clearZeroResult" class="import-result" style="display:none;"></div>
+                    <p class="manage-section-desc" style="margin-top:10px;">选中卡片上的复选框后，可通过顶部工具栏进行批量删除。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="table-controls">
+            <div class="controls-bar">
+                <div class="select-wrap">
+                    <span>每页</span>
+                    <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
+                        <option value="10">10</option>
+                        <option value="30">30</option>
+                        <option value="100">100</option>
+                        <option value="all">全部</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="tableContent">
+            <div class="loading">加载中...</div>
+        </div>
+    </div>
+
+    <div class="fab-group">
+        <button class="fab fab-refresh" onclick="loadData()">
+            <span class="spinner" style="display: none;" id="spinner"></span>
+            <svg id="refreshIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+            <span id="btnText">刷新数据</span>
+        </button>
+    </div>
 
     <script>
         // 分页变量
@@ -1891,10 +1408,7 @@ const HTML_CONTENT = `
 
             const toast = document.createElement('div');
             toast.className = 'toast' + (isError ? ' error' : '');
-            toast.innerHTML = \`
-                <span class="toast-icon">\${isError ? '❌' : '✅'}</span>
-                <span class="toast-message">\${message}</span>
-            \`;
+            toast.textContent = message;
             document.body.appendChild(toast);
 
             setTimeout(() => {
@@ -1952,7 +1466,7 @@ const HTML_CONTENT = `
                 if (keys.length > 0) {
                     const success = await copyToClipboard(keys.join('\\n'));
                     if (success) {
-                        showToast(\`✅ 已复制 \${keys.length} 个 API Key\`);
+                        showToast(\`已复制 \${keys.length} 个 API Key\`);
                     } else {
                         showToast('复制失败，请重试', true);
                     }
@@ -1994,7 +1508,7 @@ const HTML_CONTENT = `
                         }
                     });
                     
-                    showToast(\`✅ 成功删除 \${result.success} 个 Key\${result.failed > 0 ? \`, \${result.failed} 个失败\` : ''}\`);
+                    showToast(\`成功删除 \${result.success} 个 Key\${result.failed > 0 ? \`，\${result.failed} 个失败\` : ''}\`);
                     selectedKeys.clear();
                     loadData();
                 } else {
@@ -2050,9 +1564,9 @@ const HTML_CONTENT = `
                             <span class="batch-count">已选中 <strong>\${selectedKeys.size}</strong> 个 Key</span>
                         </div>
                         <div class="batch-toolbar-right">
-                            <button class="batch-btn" onclick="batchCopyKeys()">📋 批量复制</button>
-                            <button class="batch-btn danger" onclick="batchDeleteKeys()">🗑️ 批量删除</button>
-                            <button class="batch-btn" onclick="clearSelection()">✕ 取消选择</button>
+                            <button class="batch-btn" onclick="batchCopyKeys()">批量复制</button>
+                            <button class="batch-btn danger" onclick="batchDeleteKeys()">批量删除</button>
+                            <button class="batch-btn" onclick="clearSelection()">取消选择</button>
                         </div>
                     \`;
                     
@@ -2163,20 +1677,20 @@ const HTML_CONTENT = `
         function renderLimitGroup(title, groupData) {
             return '<div class="limit-group">' +
                 '<div class="limit-group-title">' + title + '</div>' +
-                renderLimitWindow('5-hour', groupData?.fiveHour) +
-                renderLimitWindow('Weekly', groupData?.weekly) +
-                renderLimitWindow('Monthly', groupData?.monthly) +
+                renderLimitWindow('5 小时', groupData?.fiveHour) +
+                renderLimitWindow('本周', groupData?.weekly) +
+                renderLimitWindow('本月', groupData?.monthly) +
             '</div>';
         }
 
         function renderExtraUsage(extra) {
             const balance = ((extra?.extraUsageBalanceCents || 0) / 100).toFixed(2);
             const allowedClass = extra?.extraUsageAllowed ? 'status-good' : 'status-warning';
-            const allowedText = extra?.extraUsageAllowed ? 'Allowed' : 'Closed';
+            const allowedText = extra?.extraUsageAllowed ? '超额已开启' : '超额已关闭';
             return '<div class="extra-usage-row">' +
-                '<span class="usage-badge ' + allowedClass + '">Extra ' + allowedText + '</span>' +
+                '<span class="usage-badge ' + allowedClass + '">' + allowedText + '</span>' +
                 '<span>余额 $' + balance + '</span>' +
-                '<span>Overage: ' + (extra?.overagePreference || '未开启') + '</span>' +
+                '<span>超额模式: ' + (extra?.overagePreference || '未开启') + '</span>' +
             '</div>';
         }
 
@@ -2187,17 +1701,19 @@ const HTML_CONTENT = `
         function renderExtraUsageCell(extra) {
             const balance = ((extra?.extraUsageBalanceCents || 0) / 100).toFixed(2);
             return '<div class="usage-cell extra">' +
-                '<span>' + (extra?.extraUsageAllowed ? 'Allowed' : 'Closed') + '</span>' +
+                '<span>' + (extra?.extraUsageAllowed ? '超额已开启' : '超额已关闭') + '</span>' +
                 '<span>$' + balance + '</span>' +
-                '<span>' + (extra?.overagePreference || 'No overage') + '</span>' +
+                '<span>' + (extra?.overagePreference || '未开启') + '</span>' +
             '</div>';
         }
 
         function loadData() {
             const spinner = document.getElementById('spinner');
             const btnText = document.getElementById('btnText');
+            const refreshIcon = document.getElementById('refreshIcon');
 
             spinner.style.display = 'inline-block';
+            if (refreshIcon) refreshIcon.style.display = 'none';
             btnText.textContent = '加载中...';
 
             fetch('/api/data?t=' + new Date().getTime())
@@ -2218,12 +1734,14 @@ const HTML_CONTENT = `
                     resetAutoRefresh();
                 })
                 .catch(error => {
-                    document.getElementById('tableContent').innerHTML = \`<div class="error">❌ 加载失败: \${error.message}</div>\`;
+                    document.getElementById('tableContent').innerHTML = \`<div class="error">加载失败: \${error.message}</div>\`;
                     document.getElementById('updateTime').textContent = "加载失败";
                 })
                 .finally(() => {
                     spinner.style.display = 'none';
-                    btnText.textContent = '🔄 刷新数据';
+                    const refreshIcon = document.getElementById('refreshIcon');
+                    if (refreshIcon) refreshIcon.style.display = '';
+                    btnText.textContent = '刷新数据';
                 });
         }
 
@@ -2307,7 +1825,7 @@ const HTML_CONTENT = `
                 const totalRemaining = data.totals.total_tokensRemaining;
                 const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
                 cardsHTML += '<div class="key-card total-card">' +
-                    '<div class="total-card-title">总计统计 (Total Summary)</div>' +
+                    '<div class="total-card-title">汇总统计</div>' +
                     '<div class="total-card-stats">' +
                         '<div class="total-card-stat"><div class="total-card-stat-label">总计额度</div><div class="total-card-stat-value">' + formatNumber(totalAllowance) + '</div></div>' +
                         '<div class="total-card-stat"><div class="total-card-stat-label">已使用</div><div class="total-card-stat-value">' + formatNumber(totalUsed) + '</div></div>' +
@@ -2331,13 +1849,8 @@ const HTML_CONTENT = `
                                 <span class="key-card-status status-danger">错误</span>
                             </div>
                             <div class="key-card-key">\${item.key}</div>
-                            <div style="color: var(--color-danger); padding: 12px; text-align: center;">
-                                ❌ 加载失败: \${item.error}
-                            </div>
-                            <div class="key-card-actions">
-                                <button class="key-card-btn key-card-btn-delete" onclick="deleteKeyFromCard('\${item.id}')">
-                                    🗑️ 删除
-                                </button>
+                            <div style="color: var(--danger); padding: 12px; text-align: center; font-size: 13px;">
+                                加载失败: \${item.error}
                             </div>
                         </div>
                     \`;
@@ -2384,7 +1897,7 @@ const HTML_CONTENT = `
                             </div>
 
                             <div class="usage-limits-grid">
-                                \${renderLimitGroup('Standard Usage', billing.standard)}
+                                \${renderLimitGroup('用量限制', billing.standard)}
                             </div>
 
                             \${renderExtraUsage(billing)}
@@ -2392,11 +1905,7 @@ const HTML_CONTENT = `
                             <div class="key-card-actions">
                                 <button class="key-card-btn key-card-btn-copy" 
                                         onclick="copyKeyFromCard('\${item.id}', this)">
-                                    📋 复制 Key
-                                </button>
-                                <button class="key-card-btn key-card-btn-delete" 
-                                        onclick="deleteKeyFromCard('\${item.id}')">
-                                    🗑️ 删除
+                                    复制 Key
                                 </button>
                             </div>
 
@@ -2405,11 +1914,11 @@ const HTML_CONTENT = `
                                 <div class="key-card-env-buttons">
                                     <button class="key-card-btn-env" 
                                             onclick="copyEnvVar('\${item.id}', 'windows', this)">
-                                        🪟 Windows
+                                        Windows
                                     </button>
                                     <button class="key-card-btn-env" 
                                             onclick="copyEnvVar('\${item.id}', 'unix', this)">
-                                        🐧 非 Windows
+                                        Linux / Mac
                                     </button>
                                 </div>
                             </div>
@@ -2423,9 +1932,9 @@ const HTML_CONTENT = `
             // 添加分页控件
             if (totalPages > 1 && !isUnlimited) {
                 cardsHTML += \`<div class="pagination">\`;
-                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>❮ 上一页</button>\`;
-                cardsHTML += \`<span class="pagination-info">第 \${currentPage} / \${totalPages} 页 (共 \${data.data.length} 条)</span>\`;
-                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage + 1})" \${currentPage === totalPages ? 'disabled' : ''}>下一页 ❯</button>\`;
+                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>上一页</button>\`;
+                cardsHTML += \`<span class="pagination-info">\${currentPage} / \${totalPages} 页（共 \${data.data.length} 条）</span>\`;
+                cardsHTML += \`<button class="pagination-btn" onclick="changePage(\${currentPage + 1})" \${currentPage === totalPages ? 'disabled' : ''}>下一页</button>\`;
                 cardsHTML += \`</div>\`;
             }
 
@@ -2461,8 +1970,8 @@ const HTML_CONTENT = `
                 if (success) {
                     button.classList.add('copied');
                     const originalText = button.innerHTML;
-                    button.innerHTML = '✅ 已复制';
-                    showToast(\`环境变量命令已复制到剪贴板 (\${platform === 'windows' ? 'Windows' : '非 Windows'})\`);
+                    button.innerHTML = '已复制';
+                    showToast(\`环境变量命令已复制 (\${platform === 'windows' ? 'Windows' : 'Linux/Mac'})\`);
                     
                     setTimeout(() => {
                         button.classList.remove('copied');
@@ -2496,8 +2005,8 @@ const HTML_CONTENT = `
                 if (success) {
                     button.classList.add('copied');
                     const originalText = button.innerHTML;
-                    button.innerHTML = '✅ 已复制';
-                    showToast('API Key 已复制到剪贴板');
+                    button.innerHTML = '已复制';
+                    showToast('API Key 已复制');
                     
                     setTimeout(() => {
                         button.classList.remove('copied');
@@ -2523,7 +2032,7 @@ const HTML_CONTENT = `
                 });
 
                 if (response.ok) {
-                    showToast('✅ 删除成功');
+                    showToast('删除成功');
                     keyCache.cache.delete(id);
                     selectedKeys.delete(id);
                     loadData();
@@ -2625,7 +2134,7 @@ const HTML_CONTENT = `
 
                 if (response.ok) {
                     result.className = 'import-result success';
-                    let message = \`✅ 成功添加 \${data.success} 个\`;
+                    let message = \`成功导入 \${data.success} 个\`;
                     if (data.duplicates > 0) {
                         message += \`, 忽略 \${data.duplicates} 个重复\`;
                     }
@@ -2649,30 +2158,30 @@ const HTML_CONTENT = `
                 result.textContent = '导入失败: ' + error.message;
             } finally {
                 spinner.style.display = 'none';
-                text.textContent = '🚀 导入密钥';
+                text.textContent = '导入';
             }
         }
 
-        // Clear zero balance keys - 清除零额度或负额度的密钥
-        async function clearZeroBalanceKeys() {
+        // Clear zero balance keys - 清除已用尽密钥
+        async function clearZeroBalanceKeys(btnEl) {
+            const resultEl = document.getElementById('clearZeroResult');
+
             if (!allData) {
-                alert('请先加载数据');
+                showToast('请先加载数据', true);
                 return;
             }
 
-            // 找出 Standard Monthly 已用尽的密钥，旧数据则沿用剩余额度判断
             const zeroBalanceKeys = allData.data.filter(item => {
                 if (item.error) return false;
                 const standardMonthly = item.billing?.standard?.monthly?.usedPercent;
                 if (typeof standardMonthly === 'number') {
                     return standardMonthly >= 100;
                 }
-                const remaining = item.totalAllowance - item.orgTotalTokensUsed;
-                return remaining <= 0;
+                return (item.totalAllowance - item.orgTotalTokensUsed) <= 0;
             });
 
             if (zeroBalanceKeys.length === 0) {
-                alert('没有需要清除的已用尽密钥');
+                if (resultEl) { resultEl.className = 'import-result success'; resultEl.textContent = '没有已用尽的密钥'; resultEl.style.display = ''; }
                 return;
             }
 
@@ -2680,39 +2189,29 @@ const HTML_CONTENT = `
                 return;
             }
 
-            const clearSpinner = document.getElementById('clearSpinner');
-            const clearBtnText = document.getElementById('clearBtnText');
-
-            clearSpinner.style.display = 'inline-block';
-            clearBtnText.textContent = '清除中...';
+            if (btnEl) { btnEl.disabled = true; btnEl.textContent = '清除中...'; }
+            if (resultEl) { resultEl.style.display = 'none'; }
 
             let successCount = 0;
             let failCount = 0;
 
-            // 批量删除
             for (const item of zeroBalanceKeys) {
                 try {
-                    const response = await fetch(\`/api/keys/\${item.id}\`, {
-                        method: 'DELETE'
-                    });
-
-                    if (response.ok) {
-                        successCount++;
-                    } else {
-                        failCount++;
-                    }
+                    const response = await fetch(\`/api/keys/\${item.id}\`, { method: 'DELETE' });
+                    if (response.ok) { successCount++; keyCache.cache.delete(item.id); }
+                    else { failCount++; }
                 } catch (error) {
                     failCount++;
-                    console.error(\`Failed to delete key \${item.id}:\`, error);
                 }
             }
 
-            clearSpinner.style.display = 'none';
-            clearBtnText.textContent = '🗑️ 清除零额度';
-
-            alert(\`清除完成！\\n成功删除: \${successCount} 个\\n失败: \${failCount} 个\`);
-
-            // 重新加载数据
+            if (btnEl) { btnEl.disabled = false; btnEl.textContent = '清除已用尽密钥'; }
+            if (resultEl) {
+                resultEl.className = failCount > 0 ? 'import-result error' : 'import-result success';
+                resultEl.textContent = \`已删除 \${successCount} 个\${failCount > 0 ? \`，\${failCount} 个失败\` : ''}\`;
+                resultEl.style.display = '';
+            }
+            showToast(\`已清除 \${successCount} 个用尽密钥\`);
             loadData();
         }
 
@@ -2732,7 +2231,7 @@ const HTML_CONTENT = `
                 startAutoRefresh();
             } else {
                 updateToggleButton(false);
-                document.getElementById('autoRefreshStatus').innerHTML = '自动刷新: <span style="color: #FF9500;">已暂停</span>';
+                document.getElementById('autoRefreshStatus').innerHTML = '自动刷新 · 已暂停';
                 document.getElementById('headerNextRefresh').textContent = '已暂停';
                 document.getElementById('nextRefreshDisplay').textContent = '已暂停';
             }
@@ -2761,7 +2260,7 @@ const HTML_CONTENT = `
             countdownInterval = setInterval(updateCountdown, 1000);
 
             // 更新状态显示
-            document.getElementById('autoRefreshStatus').innerHTML = '自动刷新: <span style="color: #34C759;">启用中</span> | 下次刷新: <span id="headerNextRefresh">计算中...</span>';
+            document.getElementById('autoRefreshStatus').innerHTML = '自动刷新 · <span id="headerNextRefresh">计算中...</span>';
             updateToggleButton(true);
             localStorage.setItem('autoRefreshEnabled', 'true');
         }
@@ -2778,7 +2277,7 @@ const HTML_CONTENT = `
             nextRefreshTime = null;
             document.getElementById('nextRefreshDisplay').textContent = '已暂停';
             document.getElementById('headerNextRefresh').textContent = '已暂停';
-            document.getElementById('autoRefreshStatus').innerHTML = '自动刷新: <span style="color: #FF9500;">已暂停</span>';
+            document.getElementById('autoRefreshStatus').innerHTML = '自动刷新 · 已暂停';
             updateToggleButton(false);
             localStorage.setItem('autoRefreshEnabled', 'false');
         }
@@ -2813,11 +2312,11 @@ const HTML_CONTENT = `
         function updateToggleButton(isRunning) {
             const btn = document.getElementById('toggleRefreshBtn');
             if (isRunning) {
-                btn.innerHTML = '⏸️ 暂停自动刷新';
-                btn.style.background = 'var(--color-warning)';
+                btn.textContent = '暂停刷新';
+                btn.className = 'import-btn secondary';
             } else {
-                btn.innerHTML = '▶️ 启动自动刷新';
-                btn.style.background = 'var(--color-success)';
+                btn.textContent = '启动刷新';
+                btn.className = 'import-btn success';
             }
         }
 
@@ -2849,43 +2348,6 @@ const HTML_CONTENT = `
             }
         }
 
-        // Theme toggle functions
-        const THEME_STORAGE_KEY = 'themeMode';
-
-        function initTheme() {
-            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            // Use saved theme, or system preference, or default to light
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-            applyTheme(theme);
-        }
-
-        function applyTheme(theme) {
-            const root = document.documentElement;
-            const toggleBtn = document.getElementById('themeToggle');
-
-            if (theme === 'dark') {
-                root.setAttribute('data-theme', 'dark');
-                if (toggleBtn) toggleBtn.textContent = '☀️';
-            } else {
-                root.removeAttribute('data-theme');
-                if (toggleBtn) toggleBtn.textContent = '🌙';
-            }
-        }
-
-        function toggleTheme() {
-            const root = document.documentElement;
-            const currentTheme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-            applyTheme(newTheme);
-
-            // Add visual feedback
-            showToast(\`已切换到\${newTheme === 'dark' ? '暗黑' : '浅色'}模式\`);
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             const pageSizeSelect = document.getElementById('pageSizeSelect');
             if (pageSizeSelect) {
@@ -2894,8 +2356,6 @@ const HTML_CONTENT = `
                     pageSizeSelect.value = selectValue;
                 }
             }
-
-            initTheme();
 
             loadData();
             initAutoRefresh();

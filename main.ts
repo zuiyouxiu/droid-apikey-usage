@@ -155,87 +155,189 @@ const LOGIN_PAGE = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录</title>
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --win-gray: #c0c0c0;
+            --win-gray-dark: #808080;
+            --win-gray-darker: #404040;
+            --win-gray-light: #dfdfdf;
+            --win-blue: #000080;
+            --win-blue-end: #1084d0;
+            --link-blue: #0000ff;
+            --danger: #ff0000;
+            --warning: #ffff00;
+            --panel: #ffffcc;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; border-radius: 0 !important; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: #F1F5F9;
+            font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--win-gray);
+            background-image:
+                linear-gradient(45deg, #b8b8b8 25%, transparent 25%),
+                linear-gradient(-45deg, #b8b8b8 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #b8b8b8 75%),
+                linear-gradient(-45deg, transparent 75%, #b8b8b8 75%);
+            background-size: 4px 4px;
+            background-position: 0 0, 0 2px, 2px -2px, -2px 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
+            color: #000;
         }
         .login-card {
-            background: #fff;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            padding: 44px 40px;
-            max-width: 400px;
+            background: var(--win-gray);
+            border: 2px solid;
+            border-color: #fff var(--win-gray-dark) var(--win-gray-dark) #fff;
+            box-shadow: inset -1px -1px 0 var(--win-gray-darker), inset 1px 1px 0 var(--win-gray-light);
+            max-width: 430px;
             width: 100%;
-            box-shadow: 0 4px 24px rgba(15,23,42,0.06);
+            padding: 3px;
+        }
+        .login-titlebar {
+            background: linear-gradient(to right, var(--win-blue), var(--win-blue-end));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 5px 7px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .window-buttons { display: flex; gap: 3px; }
+        .window-button {
+            width: 16px;
+            height: 14px;
+            background: var(--win-gray);
+            border: 2px solid;
+            border-color: #fff var(--win-gray-dark) var(--win-gray-dark) #fff;
+            color: #000;
+            font-size: 10px;
+            line-height: 9px;
+            text-align: center;
+        }
+        .login-body {
+            padding: 24px;
+            background: var(--win-gray);
         }
         .login-logo {
-            width: 48px; height: 48px;
-            background: #EFF6FF;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 24px;
+            width: 56px;
+            height: 56px;
+            background: var(--warning);
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: inset -1px -1px 0 var(--win-gray-dark), inset 1px 1px 0 #fff;
         }
-        .login-logo svg { width: 24px; height: 24px; }
-        h1 { font-size: 22px; font-weight: 600; color: #0F172A; text-align: center; margin-bottom: 6px; }
-        .subtitle { font-size: 14px; color: #64748B; text-align: center; margin-bottom: 32px; }
-        label { display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px; }
-        .form-group { margin-bottom: 20px; }
+        .login-logo svg { width: 30px; height: 30px; stroke: var(--win-blue); stroke-width: 2.25; }
+        h1 {
+            font-family: "Arial Black", Impact, Haettenschweiler, sans-serif;
+            font-size: 28px;
+            color: var(--danger);
+            text-align: center;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 var(--win-gray-dark);
+        }
+        .subtitle {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            color: #000;
+            text-align: center;
+            background: var(--panel);
+            border: 2px solid;
+            border-color: var(--win-gray-dark) #fff #fff var(--win-gray-dark);
+            box-shadow: inset 1px 1px 0 var(--win-gray-darker), inset -1px -1px 0 var(--win-gray-light);
+            padding: 8px;
+            margin-bottom: 18px;
+        }
+        label { display: block; font-size: 14px; font-weight: 700; color: #000; margin-bottom: 6px; }
+        .form-group { margin-bottom: 16px; }
         input[type="password"] {
-            width: 100%; padding: 10px 14px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 10px;
-            font-size: 15px; font-family: inherit; color: #0F172A;
-            background: #fff; outline: none;
-            transition: border-color 0.15s, box-shadow 0.15s;
+            width: 100%;
+            min-height: 44px;
+            padding: 8px 10px;
+            border: 2px solid;
+            border-color: var(--win-gray-dark) #fff #fff var(--win-gray-dark);
+            box-shadow: inset 1px 1px 0 var(--win-gray-darker), inset -1px -1px 0 var(--win-gray-light);
+            font-size: 16px;
+            font-family: "Courier New", Courier, monospace;
+            color: #000;
+            background: #fff;
+            outline: none;
         }
-        input[type="password"]:focus {
-            border-color: #2563EB;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        input[type="password"]:focus, .login-btn:focus-visible {
+            outline: 2px dotted #000;
+            outline-offset: 2px;
         }
         .login-btn {
-            width: 100%; padding: 11px;
-            background: #2563EB; color: white;
-            border: none; border-radius: 10px;
-            font-size: 15px; font-weight: 500;
-            cursor: pointer; font-family: inherit;
-            transition: background 0.15s;
+            width: 100%;
+            min-height: 44px;
+            padding: 9px 16px;
+            background: var(--win-gray);
+            color: #000;
+            border: 2px solid;
+            border-color: #fff var(--win-gray-dark) var(--win-gray-dark) #fff;
+            box-shadow: inset -1px -1px 0 var(--win-gray-darker), inset 1px 1px 0 var(--win-gray-light);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            text-transform: uppercase;
         }
-        .login-btn:hover { background: #1D4ED8; }
+        .login-btn:hover { background: #d0d0d0; }
+        .login-btn:active {
+            border-color: var(--win-gray-dark) #fff #fff var(--win-gray-dark);
+            box-shadow: inset 1px 1px 0 var(--win-gray-darker), inset -1px -1px 0 var(--win-gray-light);
+            transform: translate(1px, 1px);
+        }
         .error-msg {
-            background: #FEF2F2; color: #DC2626;
-            border: 1px solid #FECACA;
-            padding: 10px 14px; border-radius: 8px;
-            font-size: 14px; margin-bottom: 16px; display: none;
+            background: #ffcccc;
+            color: #000;
+            border: 2px solid #ff0000;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: none;
         }
         .error-msg.show { display: block; }
-        @media (max-width: 480px) {
-            .login-card { padding: 32px 24px; }
-        }
+        .blink { animation: blink 1s step-end infinite; color: var(--warning); }
+        @keyframes blink { 50% { visibility: hidden; } }
+        @media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+        @media (max-width: 480px) { .login-body { padding: 18px; } h1 { font-size: 22px; } }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <div class="login-logo">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#2563EB" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
-            </svg>
-        </div>
-        <h1>管理员登录</h1>
-        <p class="subtitle">输入密码以访问 API 监控看板</p>
-        <div class="error-msg" id="errorMessage">密码错误，请重试</div>
-        <form onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" placeholder="输入管理员密码" autocomplete="current-password" required>
+    <div class="login-card" role="dialog" aria-labelledby="loginTitle">
+        <div class="login-titlebar">
+            <span>DROID_API.EXE</span>
+            <div class="window-buttons" aria-hidden="true">
+                <span class="window-button">_</span>
+                <span class="window-button">□</span>
+                <span class="window-button">×</span>
             </div>
-            <button type="submit" class="login-btn">登录</button>
-        </form>
+        </div>
+        <div class="login-body">
+            <div class="login-logo" aria-hidden="true">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                </svg>
+            </div>
+            <h1 id="loginTitle">ACCESS LOGIN</h1>
+            <p class="subtitle"><span class="blink">NEW!</span> 输入密码以访问 API 监控看板</p>
+            <div class="error-msg" id="errorMessage">!! 密码错误，请重试 !!</div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="password">管理员密码</label>
+                    <input type="password" id="password" placeholder="TYPE PASSWORD HERE" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="login-btn">ENTER SYSTEM</button>
+            </form>
+        </div>
     </div>
     <script>
         async function handleLogin(event) {
@@ -292,9 +394,9 @@ const HTML_CONTENT = `
             --warning-light: #FFFBEB;
             --danger: #DC2626;
             --danger-light: #FEF2F2;
-            --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
-            --shadow-md: 0 4px 12px rgba(15,23,42,0.07);
-            --shadow-lg: 0 10px 30px rgba(15,23,42,0.08);
+            --shadow-sm: none;
+            --shadow-md: none;
+            --shadow-lg: none;
             --radius-sm: 8px;
             --radius-md: 10px;
             --radius-lg: 14px;
@@ -374,7 +476,7 @@ const HTML_CONTENT = `
             align-items: center;
             gap: 6px;
             padding: 7px 13px;
-            border-radius: var(--radius-md);
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
@@ -423,7 +525,7 @@ const HTML_CONTENT = `
         .page-size-select {
             padding: 6px 10px;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             background: var(--surface);
             color: var(--text-primary);
             font-size: 13px;
@@ -437,7 +539,7 @@ const HTML_CONTENT = `
         .batch-toolbar {
             background: var(--surface);
             border: 1.5px solid #BFDBFE;
-            border-radius: var(--radius-lg);
+            border-radius: 0;
             padding: 10px 14px;
             display: flex;
             align-items: center;
@@ -468,7 +570,7 @@ const HTML_CONTENT = `
             align-items: center;
             gap: 5px;
             padding: 6px 12px;
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
@@ -499,7 +601,7 @@ const HTML_CONTENT = `
         .key-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+            border-radius: 0;
             padding: 18px;
             transition: box-shadow var(--transition), border-color var(--transition);
         }
@@ -540,7 +642,7 @@ const HTML_CONTENT = `
 
         .key-card-status {
             padding: 2px 9px;
-            border-radius: 100px;
+            border-radius: 0;
             font-size: 11px;
             font-weight: 600;
             flex-shrink: 0;
@@ -556,7 +658,7 @@ const HTML_CONTENT = `
             color: var(--text-secondary);
             background: var(--surface-2);
             padding: 7px 10px;
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             margin-bottom: 12px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -569,7 +671,7 @@ const HTML_CONTENT = `
             gap: 1px;
             background: var(--border);
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             overflow: hidden;
             margin-bottom: 12px;
         }
@@ -601,7 +703,7 @@ const HTML_CONTENT = `
             justify-content: space-between;
             padding: 7px 10px;
             background: var(--surface-2);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             margin-bottom: 12px;
         }
 
@@ -630,7 +732,7 @@ const HTML_CONTENT = `
 
         .limit-group {
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             padding: 10px;
             background: var(--surface-2);
         }
@@ -660,7 +762,7 @@ const HTML_CONTENT = `
         .key-card-progress-bar {
             height: 5px;
             background: var(--border);
-            border-radius: 100px;
+            border-radius: 0;
             overflow: hidden;
         }
 
@@ -669,7 +771,7 @@ const HTML_CONTENT = `
         .key-card-progress-fill {
             height: 100%;
             background: var(--accent);
-            border-radius: 100px;
+            border-radius: 0;
             transition: width 0.5s ease;
         }
         .key-card-progress-fill.warning { background: var(--warning); }
@@ -683,7 +785,7 @@ const HTML_CONTENT = `
             margin-top: 8px;
             padding: 7px 10px;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 11px;
             color: var(--text-secondary);
             background: var(--surface-2);
@@ -691,7 +793,7 @@ const HTML_CONTENT = `
 
         .usage-badge {
             padding: 2px 7px;
-            border-radius: 100px;
+            border-radius: 0;
             font-size: 10px;
             font-weight: 600;
         }
@@ -708,7 +810,7 @@ const HTML_CONTENT = `
             flex: 1;
             padding: 8px 10px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
@@ -750,7 +852,7 @@ const HTML_CONTENT = `
             border: 1px solid var(--border);
             background: var(--surface);
             color: var(--text-secondary);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
@@ -768,7 +870,7 @@ const HTML_CONTENT = `
             grid-column: 1 / -1;
             background: var(--surface);
             border: 1px solid #BFDBFE;
-            border-radius: var(--radius-lg);
+            border-radius: 0;
             padding: 20px;
         }
 
@@ -814,13 +916,13 @@ const HTML_CONTENT = `
             background: #1E293B;
             color: white;
             padding: 9px 18px;
-            border-radius: 100px;
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
             z-index: 10000;
             animation: toastIn 0.2s ease, toastOut 0.2s ease 2.8s forwards;
             white-space: nowrap;
-            box-shadow: 0 8px 24px rgba(15,23,42,0.15);
+            box-shadow: none;
         }
 
         .toast.error { background: var(--danger); }
@@ -849,7 +951,7 @@ const HTML_CONTENT = `
             gap: 9px;
             padding: 13px 22px;
             border: none;
-            border-radius: 100px;
+            border-radius: 0;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -866,17 +968,17 @@ const HTML_CONTENT = `
         .fab-refresh {
             background: linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%);
             color: white;
-            box-shadow: 0 6px 20px rgba(37,99,235,0.38), 0 2px 6px rgba(37,99,235,0.2);
+            box-shadow: none;
         }
         .fab-refresh:hover {
-            box-shadow: 0 10px 28px rgba(37,99,235,0.48), 0 4px 10px rgba(37,99,235,0.25);
+            box-shadow: none;
         }
 
         .spinner {
             width: 15px; height: 15px;
-            border: 2px solid rgba(255,255,255,0.35);
+            border: 2px solid #FFFFFF;
             border-top-color: white;
-            border-radius: 50%;
+            border-radius: 0;
             animation: spin 0.7s linear infinite;
             display: inline-block;
             flex-shrink: 0;
@@ -911,7 +1013,7 @@ const HTML_CONTENT = `
             background: var(--surface);
             color: var(--text-primary);
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             padding: 7px 14px;
             font-size: 13px;
             font-weight: 500;
@@ -934,7 +1036,7 @@ const HTML_CONTENT = `
         .manage-panel {
             position: fixed;
             inset: 0;
-            background: rgba(15,23,42,0.4);
+            background: #008080;
             backdrop-filter: blur(4px);
             z-index: 1000;
             display: flex;
@@ -948,14 +1050,14 @@ const HTML_CONTENT = `
 
         .manage-content {
             background: var(--surface);
-            border-radius: var(--radius-xl);
+            border-radius: 0;
             max-width: 560px;
             width: 100%;
             max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+            box-shadow: none;
             animation: slideUp 0.25s ease;
         }
 
@@ -982,7 +1084,7 @@ const HTML_CONTENT = `
             background: none;
             border: none;
             width: 30px; height: 30px;
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             cursor: pointer;
             color: var(--text-muted);
             display: flex;
@@ -1025,7 +1127,7 @@ const HTML_CONTENT = `
             width: 100%;
             padding: 9px 12px;
             border: 1.5px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: 0;
             font-size: 13px;
             resize: vertical;
             line-height: 1.8;
@@ -1036,7 +1138,7 @@ const HTML_CONTENT = `
             outline: none;
             transition: border-color var(--transition);
         }
-        #importKeys:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+        #importKeys:focus { border-color: var(--accent); box-shadow: var(--bevel-in-shadow); }
 
         .import-btn {
             margin-top: 10px;
@@ -1047,7 +1149,7 @@ const HTML_CONTENT = `
             background: var(--accent);
             color: white;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
@@ -1069,7 +1171,7 @@ const HTML_CONTENT = `
         .import-result {
             margin-top: 10px;
             padding: 9px 12px;
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 13px;
             font-weight: 500;
         }
@@ -1096,7 +1198,7 @@ const HTML_CONTENT = `
             width: 90px;
             padding: 7px 10px;
             border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 0;
             font-size: 14px;
             font-family: Consolas, 'Courier New', monospace;
             color: var(--text-primary);
@@ -1131,35 +1233,763 @@ const HTML_CONTENT = `
             .manage-content { max-height: 95vh; }
             .manage-body { padding: 14px; }
         }
+
+        :root {
+            --bg: #C0C0C0;
+            --surface: #C0C0C0;
+            --surface-2: #FFFFCC;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --text-muted: #808080;
+            --border: #000000;
+            --border-light: #FFFFFF;
+            --accent: #0000FF;
+            --accent-light: #FFFFCC;
+            --success: #00AA00;
+            --success-light: #00FF00;
+            --warning: #FFFF00;
+            --warning-light: #FFFFCC;
+            --danger: #FF0000;
+            --danger-light: #FFCCCC;
+            --title-bar: #000080;
+            --title-bar-end: #1084D0;
+            --shadow-sm: none;
+            --shadow-md: none;
+            --shadow-lg: none;
+            --radius-sm: 0;
+            --radius-md: 0;
+            --radius-lg: 0;
+            --radius-xl: 0;
+            --transition: 50ms linear;
+            --font-body: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            --font-heading: "Arial Black", Impact, Haettenschweiler, sans-serif;
+            --font-mono: "Courier New", Courier, monospace;
+            --bevel-out-border: #FFFFFF #808080 #808080 #FFFFFF;
+            --bevel-in-border: #808080 #FFFFFF #FFFFFF #808080;
+            --bevel-out-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #DFDFDF;
+            --bevel-in-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #DFDFDF;
+        }
+
+        *, *::before, *::after { border-radius: 0 !important; }
+        ::selection { background: #000080; color: #FFFFFF; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #C0C0C0;
+            background-image:
+                linear-gradient(45deg, #B8B8B8 25%, transparent 25%),
+                linear-gradient(-45deg, #B8B8B8 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #B8B8B8 75%),
+                linear-gradient(-45deg, transparent 75%, #B8B8B8 75%);
+            background-size: 4px 4px;
+            background-position: 0 0, 0 2px, 2px -2px, -2px 0;
+            color: #000000;
+            line-height: 1.45;
+            -webkit-font-smoothing: none;
+        }
+
+        button, input, select, textarea { font-family: var(--font-body); }
+        button { min-height: 44px; }
+        a { color: #0000FF; text-decoration: underline; }
+        a:visited { color: #800080; }
+        a:hover, a:active { color: #FF0000; }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        .key-card-checkbox:focus-visible {
+            outline: 2px dotted #000000;
+            outline-offset: 2px;
+        }
+
+        .header,
+        .table-container,
+        .batch-toolbar,
+        .key-card,
+        .total-card,
+        .manage-content,
+        .fab,
+        .pagination-btn,
+        .btn,
+        .batch-btn,
+        .key-card-btn,
+        .key-card-btn-env,
+        .import-btn,
+        .close-btn,
+        .decorative-square {
+            border: 2px solid;
+            border-color: var(--bevel-out-border);
+            box-shadow: var(--bevel-out-shadow);
+            background: #C0C0C0;
+        }
+
+        .btn:active,
+        .batch-btn:active,
+        .key-card-btn:active,
+        .key-card-btn-env:active,
+        .import-btn:active,
+        .close-btn:active,
+        .fab:active,
+        .pagination-btn:active:not(:disabled) {
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            transform: translate(1px, 1px);
+        }
+
+        .retro-title-bar,
+        .key-card-header,
+        .total-card-title,
+        .manage-header,
+        .header-titlebar {
+            background: linear-gradient(to right, #000080, #1084D0);
+            color: #FFFFFF;
+            padding: 5px 8px;
+            font-weight: 700;
+            border-bottom: 2px solid #000000;
+        }
+
+        .retro-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .retro-marquee {
+            max-width: 1180px;
+            margin: 10px auto 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            background: #000000;
+            color: #00FF00;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            padding: 6px 0;
+        }
+
+        .retro-marquee-track {
+            display: inline-block;
+            min-width: 100%;
+            padding-left: 100%;
+            animation: marquee 22s linear infinite;
+        }
+
+        .retro-hot { color: #FF0000; background: #FFFF00; font-weight: 700; padding: 1px 4px; }
+        .retro-new { color: #FFFF00; animation: blink 1s step-end infinite; }
+        .rainbow-text { animation: rainbow 4s linear infinite; }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        @keyframes rainbow {
+            0% { color: #FF0000; }
+            17% { color: #FF8000; }
+            33% { color: #FFFF00; }
+            50% { color: #00FF00; }
+            67% { color: #0080FF; }
+            83% { color: #8000FF; }
+            100% { color: #FF0000; }
+        }
+
+        @keyframes blink { 50% { visibility: hidden; } }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 10px 2px rgba(255,0,0,0.5); }
+        }
+
+        .header {
+            max-width: 1180px;
+            margin: 0 auto 10px;
+            padding: 3px;
+            position: sticky;
+            top: 8px;
+            z-index: 100;
+        }
+
+        .header-titlebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .window-controls { display: flex; gap: 3px; flex-shrink: 0; }
+        .window-control {
+            width: 18px;
+            height: 16px;
+            background: #C0C0C0;
+            border: 2px solid;
+            border-color: var(--bevel-out-border);
+            color: #000000;
+            font-size: 10px;
+            line-height: 11px;
+            text-align: center;
+            box-shadow: var(--bevel-out-shadow);
+        }
+
+        .header-title {
+            font-family: var(--font-heading);
+            font-size: clamp(26px, 6vw, 58px);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 0 #808080;
+            white-space: nowrap;
+        }
+
+        .header-inner {
+            max-width: none;
+            height: auto;
+            min-height: 0;
+            align-items: stretch;
+            padding: 10px;
+            gap: 10px;
+            background: #C0C0C0;
+        }
+
+        .header-left { gap: 8px; }
+        .header-meta,
+        .header-refresh-info,
+        .hit-counter {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #00FF00;
+            background: #000000;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 6px 8px;
+            white-space: normal;
+        }
+
+        .header-right { align-items: stretch; flex-wrap: wrap; }
+        .btn,
+        .batch-btn,
+        .key-card-btn,
+        .key-card-btn-env,
+        .import-btn,
+        .pagination-btn {
+            color: #000000;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: none;
+            line-height: 1.1;
+        }
+
+        .btn svg { width: 18px; height: 18px; stroke-width: 2px; }
+        .btn-outline:hover,
+        .batch-btn:hover,
+        .key-card-btn:hover,
+        .key-card-btn-env:hover,
+        .import-btn:hover,
+        .pagination-btn:hover:not(:disabled) { background: #D0D0D0; color: #000000; }
+
+        .main {
+            max-width: 1180px;
+            padding: 0 12px 84px;
+        }
+
+        .table-container {
+            padding: 10px;
+            margin-bottom: 16px;
+        }
+
+        .construction-banner {
+            background: repeating-linear-gradient(45deg, #FFFF00, #FFFF00 10px, #000000 10px, #000000 20px);
+            border: 2px solid #000000;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .construction-banner span {
+            display: inline-block;
+            background: #C0C0C0;
+            border: 2px solid;
+            border-color: var(--bevel-out-border);
+            box-shadow: var(--bevel-out-shadow);
+            padding: 6px 10px;
+            font-family: var(--font-heading);
+            font-size: 15px;
+            color: #FF0000;
+            text-transform: uppercase;
+            animation: pulse-glow 1.5s ease-in-out infinite;
+        }
+
+        .decorative-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(16px, 1fr));
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .decorative-square { min-height: 18px; }
+        .sq-red { background: #FF0000; }
+        .sq-green { background: #00FF00; }
+        .sq-blue { background: #0000FF; }
+        .sq-yellow { background: #FFFF00; }
+        .sq-magenta { background: #FF00FF; }
+        .sq-cyan { background: #00FFFF; }
+
+        .table-controls {
+            margin-bottom: 10px;
+            background: #FFFFCC;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 8px;
+        }
+
+        .controls-bar { justify-content: space-between; }
+        .select-wrap { font-size: 13px; font-weight: 700; color: #000000; }
+        .page-size-select,
+        #refreshInterval,
+        #importKeys,
+        input[type="number"],
+        textarea,
+        select {
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            background: #FFFFFF;
+            color: #000000;
+            min-height: 36px;
+            outline: none;
+            font-family: var(--font-mono);
+        }
+
+        .groove-divider,
+        .manage-divider {
+            border: none;
+            height: 4px;
+            background: linear-gradient(to bottom, #808080 0%, #808080 50%, #FFFFFF 50%, #FFFFFF 100%);
+            margin: 12px 0;
+        }
+
+        .batch-toolbar {
+            padding: 8px;
+            color: #000000;
+        }
+
+        .batch-toolbar-left { color: #000000; font-weight: 700; }
+        .batch-toolbar strong { background: #FFFF00; color: #FF0000; padding: 1px 5px; border: 1px solid #000000; }
+        .batch-btn.danger,
+        .import-btn.danger-btn,
+        .toast.error { background: #FF0000; color: #FFFFFF; }
+        .import-btn.success,
+        .key-card-btn-copy.copied,
+        .key-card-btn-env.copied { background: #00AA00; color: #FFFFFF; }
+        .import-btn.secondary { background: #C0C0C0; color: #000000; }
+
+        .cards-grid {
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 12px;
+        }
+
+        .key-card,
+        .total-card {
+            padding: 3px;
+            transition: none;
+            overflow: hidden;
+        }
+
+        .key-card:hover { border-color: #FFFFFF #000000 #000000 #FFFFFF; box-shadow: inset -2px -2px 0 #808080, inset 2px 2px 0 #FFFFFF; }
+        .key-card.selected { outline: 4px solid #FFFF00; background: #C0C0C0; }
+
+        .key-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+            min-height: 28px;
+        }
+
+        .key-card-body,
+        .total-card-body,
+        .retro-inset-panel {
+            background: #FFFFCC;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 10px;
+        }
+
+        .key-card-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #0000FF;
+            cursor: pointer;
+        }
+
+        .key-card-id {
+            color: #FFFFFF;
+            font-size: 12px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .key-card-status,
+        .usage-badge {
+            border: 2px solid #000000;
+            color: #000000;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-good { background: #00FF00; color: #000000; }
+        .status-warning { background: #FFFF00; color: #000000; }
+        .status-danger { background: #FF0000; color: #FFFFFF; }
+
+        .key-card-key {
+            background: #FFFFFF;
+            color: #000000;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            font-family: var(--font-mono);
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .key-card-stats,
+        .total-card-stats {
+            border: 2px solid #000000;
+            background: #808080;
+            gap: 2px;
+            margin-bottom: 10px;
+            overflow: visible;
+        }
+
+        .key-card-stat,
+        .total-card-stat {
+            background: #FFFFFF;
+            padding: 8px 6px;
+            border: 1px solid #808080;
+        }
+
+        .key-card-stat:nth-child(odd),
+        .total-card-stat:nth-child(odd) { background: #E8E8E8; }
+
+        .key-card-stat-label,
+        .total-card-stat-label,
+        .key-card-date-label,
+        .limit-group-title,
+        .key-card-env-title {
+            color: #000000;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .key-card-stat-value,
+        .total-card-stat-value,
+        .key-card-date-value {
+            color: #000080;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .key-card-dates,
+        .extra-usage-row,
+        .limit-group {
+            background: #FFFFFF;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 8px;
+        }
+
+        .key-card-date { min-width: 0; }
+        .usage-limits-grid { gap: 8px; }
+        .limit-window-meta,
+        .limit-window-footer { color: #000000; font-family: var(--font-mono); }
+        .limit-window-label { color: #000000; font-weight: 700; }
+        .limit-window-time { color: #0000FF; }
+
+        .key-card-progress-bar {
+            position: relative;
+            height: 24px;
+            background:
+                repeating-linear-gradient(90deg, #FFFFFF 0, #FFFFFF 9px, #C0C0C0 9px, #C0C0C0 10px),
+                #FFFFFF;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 2px;
+            overflow: hidden;
+        }
+
+        .key-card-progress-fill {
+            height: 100%;
+            min-width: 3px;
+            background: repeating-linear-gradient(45deg, #0000FF 0, #0000FF 7px, #1084D0 7px, #1084D0 14px);
+            border-right: 2px solid #000000;
+            box-shadow: inset -1px -1px 0 #000080, inset 1px 1px 0 #5555FF;
+            transition: width 0.2s linear;
+        }
+        .key-card-progress-fill.warning { background: repeating-linear-gradient(45deg, #FFFF00 0, #FFFF00 7px, #FF8000 7px, #FF8000 14px); }
+        .key-card-progress-fill.danger { background: repeating-linear-gradient(45deg, #FF0000 0, #FF0000 7px, #800000 7px, #800000 14px); }
+        .key-card-progress-bar.compact {
+            height: 34px;
+            margin: 8px 0 6px;
+        }
+
+        .key-card-progress-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: #000000;
+            text-shadow: 1px 0 0 #FFFFFF, -1px 0 0 #FFFFFF, 0 1px 0 #FFFFFF, 0 -1px 0 #FFFFFF;
+            pointer-events: none;
+        }
+
+        .limit-window-row {
+            background: #FFFFFF;
+            border: 2px solid #000000;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        .limit-window-row:nth-child(odd) { background: #E8E8E8; }
+
+        .limit-window-percent {
+            min-width: 86px;
+            border: 2px solid #000000;
+            padding: 4px 8px;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #FFFFFF;
+        }
+
+        .key-card-actions,
+        .key-card-env-group {
+            border-top: 0;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .total-card-title {
+            color: #FFFFFF;
+            margin-bottom: 0;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            letter-spacing: 0;
+        }
+
+        .total-card-stat-value { font-size: 24px; color: #00AA00; }
+
+        .toast {
+            background: #000000;
+            color: #00FF00;
+            border: 2px solid;
+            border-color: var(--bevel-out-border);
+            box-shadow: var(--bevel-out-shadow);
+            font-family: var(--font-mono);
+            bottom: 18px;
+            animation: toastIn 0.1s linear, toastOut 0.1s linear 2.8s forwards;
+        }
+
+        .fab-group { bottom: 20px; right: 20px; }
+        .fab {
+            background: #0000FF;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            transition: none;
+        }
+        .fab:hover { transform: none; background: #000080; }
+        .fab:hover svg { transform: none; }
+        .fab svg { transition: none; stroke-width: 2px; }
+
+        .spinner {
+            border-radius: 0;
+            border-color: #FFFFFF;
+            border-top-color: #FF0000;
+            background: #FFFF00;
+        }
+
+        .loading,
+        .error {
+            background: #FFFFCC;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            color: #000000;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            padding: 36px 18px;
+        }
+        .error { color: #FF0000; }
+
+        .pagination { gap: 8px; flex-wrap: wrap; }
+        .pagination-info {
+            color: #000000;
+            background: #FFFFCC;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 8px 10px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+        .pagination-btn:disabled { opacity: 1; color: #808080; cursor: not-allowed; }
+        .pagination-btn.active { background: #0000FF; color: #FFFFFF; }
+
+        .manage-panel {
+            background-color: #008080;
+            background-image:
+                linear-gradient(45deg, #007070 25%, transparent 25%),
+                linear-gradient(-45deg, #007070 25%, transparent 25%);
+            background-size: 8px 8px;
+            backdrop-filter: none;
+            animation: none;
+        }
+
+        .manage-content {
+            padding: 3px;
+            max-width: 620px;
+            animation: none;
+        }
+
+        .manage-header {
+            border-bottom: 2px solid #000000;
+            padding: 5px 8px;
+        }
+        .manage-header h2 {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .close-btn {
+            width: 28px;
+            height: 24px;
+            min-height: 24px;
+            color: #000000;
+            padding: 0;
+        }
+        .close-btn:hover { background: #D0D0D0; color: #000000; }
+        .manage-body {
+            background: #C0C0C0;
+            padding: 14px;
+        }
+        .manage-section {
+            background: #FFFFCC;
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            padding: 10px;
+        }
+        .manage-section h3 {
+            font-family: var(--font-heading);
+            color: #000080;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        .manage-section-desc,
+        .refresh-unit,
+        #refreshStatus { color: #000000; font-weight: 700; }
+        .import-result {
+            border: 2px solid;
+            border-color: var(--bevel-in-border);
+            box-shadow: var(--bevel-in-shadow);
+            background: #FFFFFF;
+            color: #000000;
+        }
+        .import-result.success { background: #CCFFCC; color: #000000; border: 2px solid #00AA00; }
+        .import-result.error { background: #FFCCCC; color: #000000; border: 2px solid #FF0000; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+            .retro-marquee-track { transform: none; padding-left: 0; }
+            .rainbow-text { color: #FF0000; }
+        }
+
+        @media (max-width: 768px) {
+            .retro-shell { padding: 8px; }
+            .header { top: 0; margin: 0 8px 10px; }
+            .header-titlebar { align-items: flex-start; }
+            .header-title { white-space: normal; font-size: 30px; }
+            .header-inner { flex-direction: column; }
+            .header-refresh-info { display: block; }
+            .main { padding: 0 8px 76px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .decorative-grid { grid-template-columns: repeat(6, 1fr); }
+            .controls-bar { justify-content: flex-start; }
+            .fab-group { bottom: 12px; right: 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .header-title { font-size: 24px; }
+            .table-container, .manage-body { padding: 8px; }
+            .key-card-stats { grid-template-columns: 1fr; }
+            .key-card-dates { flex-direction: column; gap: 8px; }
+            .key-card-env-buttons, .key-card-actions, .refresh-btns { flex-direction: column; }
+            .fab { padding: 10px 14px; }
+        }
     </style>
 </head>
 <body>
+    <div class="retro-marquee" aria-label="系统公告">
+        <div class="retro-marquee-track">
+            *** WELCOME TO DROID API BALANCE MONITOR 1997 ***
+            <span class="retro-hot">HOT!</span> LIVE TOKENS ***
+            <span class="retro-new">NEW!</span> AUTO REFRESH ENABLED *** COPY KEYS WITH ONE CLICK ***
+        </div>
+    </div>
+
     <div class="header">
+        <div class="header-titlebar">
+            <div class="header-title rainbow-text">Droid BALANCE MONITOR</div>
+            <div class="window-controls" aria-hidden="true">
+                <span class="window-control">_</span>
+                <span class="window-control">□</span>
+                <span class="window-control">×</span>
+            </div>
+        </div>
         <div class="header-inner">
             <div class="header-left">
-                <div class="header-title">Droid API 余额监控</div>
-                <div class="header-meta" id="updateTime">加载中...</div>
+                <div class="hit-counter">VISITORS: 0001997 | SINCE 1995 | <span id="updateTime">加载中...</span></div>
+                <div class="header-meta">SYSTEM STATUS: ONLINE | BEST VIEWED AT 800x600 | NO MODERN MINIMALISM</div>
             </div>
             <div class="header-right">
                 <span class="header-refresh-info">
-                    <span id="autoRefreshStatus">自动刷新 · <span id="headerNextRefresh">计算中...</span></span>
+                    <span id="autoRefreshStatus">AUTO REFRESH · <span id="headerNextRefresh">计算中...</span></span>
                 </span>
                 <button class="btn btn-outline" onclick="toggleManagePanel()">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    管理密钥
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    KEY MANAGER
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Management Panel -->
     <div class="manage-panel" id="managePanel" style="display: none;">
-        <div class="manage-content">
+        <div class="manage-content" role="dialog" aria-modal="true" aria-labelledby="manageTitle">
             <div class="manage-header">
-                <h2>密钥管理</h2>
-                <button class="close-btn" onclick="toggleManagePanel()">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
+                <h2 id="manageTitle">KEY_MANAGER.EXE</h2>
+                <button class="close-btn" onclick="toggleManagePanel()" aria-label="关闭密钥管理窗口">×</button>
             </div>
             <div class="manage-body">
                 <div class="manage-section">
@@ -1168,7 +1998,7 @@ const HTML_CONTENT = `
                     <textarea id="importKeys" placeholder="每行一个 API Key&#10;fk-xxxxx&#10;fk-yyyyy" rows="8"></textarea>
                     <button class="import-btn" onclick="importKeys()">
                         <span id="importSpinner" style="display: none;" class="spinner"></span>
-                        <span id="importText">导入</span>
+                        <span id="importText">IMPORT KEYS</span>
                     </button>
                     <div id="importResult" class="import-result"></div>
                 </div>
@@ -1183,8 +2013,8 @@ const HTML_CONTENT = `
                         <span class="refresh-unit">分钟</span>
                     </div>
                     <div class="refresh-btns">
-                        <button class="import-btn success" onclick="saveRefreshSettings()">保存</button>
-                        <button class="import-btn secondary" onclick="toggleAutoRefresh()" id="toggleRefreshBtn">暂停刷新</button>
+                        <button class="import-btn success" onclick="saveRefreshSettings()">SAVE</button>
+                        <button class="import-btn secondary" onclick="toggleAutoRefresh()" id="toggleRefreshBtn">PAUSE</button>
                     </div>
                     <div id="refreshStatus">下次刷新: <span id="nextRefreshDisplay">计算中...</span></div>
                 </div>
@@ -1196,7 +2026,7 @@ const HTML_CONTENT = `
                     <p class="manage-section-desc">删除已用尽（月额度 100%）的密钥，或批量删除选中的密钥</p>
                     <div class="refresh-btns">
                         <button class="import-btn danger-btn" id="clearZeroBtn" onclick="clearZeroBalanceKeys(this)">
-                            清除已用尽密钥
+                            CLEAR EMPTY KEYS
                         </button>
                     </div>
                     <div id="clearZeroResult" class="import-result" style="display:none;"></div>
@@ -1207,21 +2037,29 @@ const HTML_CONTENT = `
     </div>
 
     <div class="main">
-        <div class="table-controls">
-            <div class="controls-bar">
-                <div class="select-wrap">
-                    <span>每页</span>
-                    <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
-                        <option value="10">10</option>
-                        <option value="30">30</option>
-                        <option value="100">100</option>
-                        <option value="all">全部</option>
-                    </select>
+        <div class="table-container">
+            <div class="decorative-grid" aria-hidden="true">
+                <span class="decorative-square sq-red"></span><span class="decorative-square sq-green"></span><span class="decorative-square sq-blue"></span><span class="decorative-square sq-yellow"></span><span class="decorative-square sq-magenta"></span><span class="decorative-square sq-cyan"></span>
+                <span class="decorative-square sq-cyan"></span><span class="decorative-square sq-magenta"></span><span class="decorative-square sq-yellow"></span><span class="decorative-square sq-blue"></span><span class="decorative-square sq-green"></span><span class="decorative-square sq-red"></span>
+            </div>
+            <div id="tableContent">
+                <div class="loading">LOADING API DATA...</div>
+            </div>
+            <div class="groove-divider" aria-hidden="true"></div>
+            <div class="table-controls">
+                <div class="controls-bar">
+                    <div class="select-wrap">
+                        <span>每页显示</span>
+                        <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize(this.value)">
+                            <option value="10">10</option>
+                            <option value="30">30</option>
+                            <option value="100">100</option>
+                            <option value="all">全部</option>
+                        </select>
+                    </div>
+                    <span class="retro-hot">NEW! CARD VIEW ONLY</span>
                 </div>
             </div>
-        </div>
-        <div id="tableContent">
-            <div class="loading">加载中...</div>
         </div>
     </div>
 
@@ -1561,12 +2399,13 @@ const HTML_CONTENT = `
                     toolbar.className = 'batch-toolbar';
                     toolbar.innerHTML = \`
                         <div class="batch-toolbar-left">
+                            <span class="retro-new">NEW!</span>
                             <span class="batch-count">已选中 <strong>\${selectedKeys.size}</strong> 个 Key</span>
                         </div>
                         <div class="batch-toolbar-right">
-                            <button class="batch-btn" onclick="batchCopyKeys()">批量复制</button>
-                            <button class="batch-btn danger" onclick="batchDeleteKeys()">批量删除</button>
-                            <button class="batch-btn" onclick="clearSelection()">取消选择</button>
+                            <button class="batch-btn" onclick="batchCopyKeys()">COPY SELECTED</button>
+                            <button class="batch-btn danger" onclick="batchDeleteKeys()">DELETE SELECTED</button>
+                            <button class="batch-btn" onclick="clearSelection()">CLEAR SELECT</button>
                         </div>
                     \`;
                     
@@ -1662,10 +2501,11 @@ const HTML_CONTENT = `
             return '<div class="limit-window-row">' +
                 '<div class="limit-window-meta">' +
                     '<span class="limit-window-label">' + label + '</span>' +
-                    '<span class="limit-window-time">↻ ' + formatRemainingTime(windowData?.secondsRemaining) + '</span>' +
+                    '<span class="limit-window-percent ' + status.class + '">' + formatUsedPercent(percent) + '</span>' +
                 '</div>' +
-                '<div class="key-card-progress-bar compact">' +
+                '<div class="key-card-progress-bar compact" aria-label="' + label + ' 已用 ' + formatUsedPercent(percent) + '">' +
                     '<div class="key-card-progress-fill ' + status.progressClass + '" style="width: ' + width.toFixed(0) + '%"></div>' +
+                    '<span class="key-card-progress-label">USED ' + formatUsedPercent(percent) + '</span>' +
                 '</div>' +
                 '<div class="limit-window-footer">' +
                     '<span>' + formatUsedPercent(percent) + '</span>' +
@@ -1819,22 +2659,6 @@ const HTML_CONTENT = `
 
             let cardsHTML = '<div class="cards-grid">';
 
-            if (!data.billingTotals) {
-                const totalAllowance = data.totals.total_totalAllowance;
-                const totalUsed = data.totals.total_orgTotalTokensUsed;
-                const totalRemaining = data.totals.total_tokensRemaining;
-                const overallRatio = totalAllowance > 0 ? (totalAllowance - totalRemaining) / totalAllowance : 0;
-                cardsHTML += '<div class="key-card total-card">' +
-                    '<div class="total-card-title">汇总统计</div>' +
-                    '<div class="total-card-stats">' +
-                        '<div class="total-card-stat"><div class="total-card-stat-label">总计额度</div><div class="total-card-stat-value">' + formatNumber(totalAllowance) + '</div></div>' +
-                        '<div class="total-card-stat"><div class="total-card-stat-label">已使用</div><div class="total-card-stat-value">' + formatNumber(totalUsed) + '</div></div>' +
-                        '<div class="total-card-stat"><div class="total-card-stat-label">剩余额度</div><div class="total-card-stat-value">' + formatNumber(totalRemaining) + '</div></div>' +
-                        '<div class="total-card-stat"><div class="total-card-stat-label">使用百分比</div><div class="total-card-stat-value">' + formatPercentage(overallRatio) + '</div></div>' +
-                    '</div>' +
-                '</div>';
-            }
-
             // 数据卡片
             pageData.forEach(item => {
                 const isChecked = selectedKeys.has(item.id);
@@ -1846,11 +2670,13 @@ const HTML_CONTENT = `
                                 <input type="checkbox" class="key-card-checkbox" \${isChecked ? 'checked' : ''} 
                                        onchange="toggleSelection('\${item.id}'); renderCards();">
                                 <div class="key-card-id">\${item.id}</div>
-                                <span class="key-card-status status-danger">错误</span>
+                                <span class="key-card-status status-danger">ERROR</span>
                             </div>
-                            <div class="key-card-key">\${item.key}</div>
-                            <div style="color: var(--danger); padding: 12px; text-align: center; font-size: 13px;">
-                                加载失败: \${item.error}
+                            <div class="key-card-body">
+                                <div class="key-card-key">\${item.key}</div>
+                                <div class="retro-inset-panel" style="color: var(--danger); text-align: center; font-size: 13px; font-weight: 700;">
+                                    加载失败: \${item.error}
+                                </div>
                             </div>
                         </div>
                     \`;
@@ -1867,8 +2693,8 @@ const HTML_CONTENT = `
                                 <div class="key-card-id">\${item.id}</div>
                                 <span class="key-card-status \${status.class}">\${status.text}</span>
                             </div>
-
-                            <div class="key-card-key" title="\${item.key}">\${item.key}</div>
+                            <div class="key-card-body">
+                                <div class="key-card-key" title="\${item.key}">\${item.key}</div>
 
                             <div class="key-card-stats">
                                 <div class="key-card-stat">
@@ -1909,17 +2735,18 @@ const HTML_CONTENT = `
                                 </button>
                             </div>
 
-                            <div class="key-card-env-group">
-                                <div class="key-card-env-title">复制环境变量</div>
-                                <div class="key-card-env-buttons">
-                                    <button class="key-card-btn-env" 
-                                            onclick="copyEnvVar('\${item.id}', 'windows', this)">
-                                        Windows
-                                    </button>
-                                    <button class="key-card-btn-env" 
-                                            onclick="copyEnvVar('\${item.id}', 'unix', this)">
-                                        Linux / Mac
-                                    </button>
+                                <div class="key-card-env-group">
+                                    <div class="key-card-env-title">复制环境变量</div>
+                                    <div class="key-card-env-buttons">
+                                        <button class="key-card-btn-env"
+                                                onclick="copyEnvVar('\${item.id}', 'windows', this)">
+                                            Windows
+                                        </button>
+                                        <button class="key-card-btn-env"
+                                                onclick="copyEnvVar('\${item.id}', 'unix', this)">
+                                            Linux / Mac
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2071,7 +2898,7 @@ const HTML_CONTENT = `
 
             currentPage = page;
             renderCards();
-            document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelector('.table-container').scrollIntoView({ behavior: 'auto', block: 'start' });
         }
 
         function changePageSize(value) {
@@ -2089,7 +2916,7 @@ const HTML_CONTENT = `
             }
             currentPage = 1;
             renderCards();
-            document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelector('.table-container').scrollIntoView({ behavior: 'auto', block: 'start' });
         }
 
         // Toggle manage panel

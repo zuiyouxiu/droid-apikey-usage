@@ -593,7 +593,7 @@ const HTML_CONTENT = `
         /* Cards grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px;
         }
 
@@ -1589,7 +1589,7 @@ const HTML_CONTENT = `
         .import-btn.secondary { background: #C0C0C0; color: #000000; }
 
         .cards-grid {
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
         }
 
